@@ -1,0 +1,49 @@
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\f_AICont.exe.config
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\f_AICont.exe
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\f_AICont.pdb
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\JYUSB62405.dll
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.ArrayUtility.dll
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.GUI.dll
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\JYUSB62405.xml
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.ArrayUtility.xml
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.GUI.xml
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\Winform AI Continuous MultiChannel.csprojResolveAssemblyReference.cache
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\f_AICont.Properties.Resources.resources
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\SeeSharpExample.JY.JYUSB62405.MainForm.resources
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\Winform AI Continuous MultiChannel.csproj.GenerateResource.Cache
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\f_AICont.exe
+D:\USB-2405\Source code\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\f_AICont.pdb
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\f_AICont.exe.config
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\f_AICont.exe
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\f_AICont.pdb
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\f_AICont.exe
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\f_AICont.pdb
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\JYUSB62405.dll
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.ArrayUtility.dll
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.GUI.dll
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\JYUSB62405.xml
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.ArrayUtility.xml
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.GUI.xml
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\f_AICont.Properties.Resources.resources
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\SeeSharpExample.JY.JYUSB62405.MainForm.resources
+D:\MCM POC\JYUSB62405.Examples\Analog Input\Winform AI Continuous MultiChannel\obj\Debug\Winform AI Continuous MultiChannel.csproj.GenerateResource.Cache
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\f_AICont.exe.config
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\Debug\f_AICont.exe
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\Debug\f_AICont.pdb
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\f_AICont.exe
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\f_AICont.pdb
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\JYUSB62405.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.ArrayUtility.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.GUI.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\JYUSB62405.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.ArrayUtility.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.GUI.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\Debug\f_AICont.Properties.Resources.resources
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\Debug\SeeSharpExample.JY.JYUSB62405.MainForm.resources
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\Debug\Winform AI Continuous MultiChannel.csproj.GenerateResource.Cache
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\IPAddressControlLib.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.DSP.Fundamental.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.DSP.Fundamental.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.DSP.SoundVibration.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\Debug\SeeSharpTools.JY.DSP.SoundVibration.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\Debug\Winform AI Continuous MultiChannel.csprojResolveAssemblyReference.cache

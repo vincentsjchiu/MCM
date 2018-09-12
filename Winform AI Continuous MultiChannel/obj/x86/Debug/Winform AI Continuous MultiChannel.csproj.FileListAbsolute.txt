@@ -1,0 +1,20 @@
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\f_AICont.exe.config
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\f_AICont.exe
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\f_AICont.pdb
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\IPAddressControlLib.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\JYUSB62405.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.ArrayUtility.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.DSP.Fundamental.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.DSP.SoundVibration.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.GUI.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\JYUSB62405.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.ArrayUtility.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.DSP.Fundamental.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.DSP.SoundVibration.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.GUI.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\f_AICont.Properties.Resources.resources
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\SeeSharpExample.JY.JYUSB62405.MainForm.resources
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\Winform AI Continuous MultiChannel.csproj.GenerateResource.Cache
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\f_AICont.exe
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\f_AICont.pdb
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\Winform AI Continuous MultiChannel.csprojResolveAssemblyReference.cache
