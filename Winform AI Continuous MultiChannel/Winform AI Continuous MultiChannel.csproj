@@ -56,7 +56,7 @@
     <Reference Include="IPAddressControlLib">
       <HintPath>C:\SeeSharp\JYTEK\SeeSharpTools\Bin\IPAddressControlLib.dll</HintPath>
     </Reference>
-    <Reference Include="JYUSB62405, Version=1.0.2.0, Culture=neutral, PublicKeyToken=baf6f065ce4627cc, processorArchitecture=MSIL">
+    <Reference Include="JYUSB62405, Version=1.4.0.1081, Culture=neutral, PublicKeyToken=baf6f065ce4627cc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\SeeSharp\JYTEK\Hardware\DSA\JYUSB62405\Bin\JYUSB62405.dll</HintPath>
     </Reference>
@@ -68,6 +68,9 @@
     </Reference>
     <Reference Include="SeeSharpTools.JY.DSP.SoundVibration">
       <HintPath>C:\SeeSharp\JYTEK\SeeSharpTools\Bin\SeeSharpTools.JY.DSP.SoundVibration.dll</HintPath>
+    </Reference>
+    <Reference Include="SeeSharpTools.JY.File">
+      <HintPath>C:\SeeSharp\JYTEK\SeeSharpTools\Bin\SeeSharpTools.JY.File.dll</HintPath>
     </Reference>
     <Reference Include="SeeSharpTools.JY.GUI">
       <HintPath>C:\SeeSharp\JYTEK\SeeSharpTools\Bin\SeeSharpTools.JY.GUI.dll</HintPath>

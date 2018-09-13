@@ -2,9 +2,12 @@
 using System.Windows.Forms;
 using JYUSB62405;
 using SeeSharpTools.JY.ArrayUtility;
+using SeeSharpTools.JY.File;
 using SeeSharpTools.JY.DSP.Fundamental;
 using System.Threading;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 /// <summary>
 /// JYUSB62405多通道连续采集
 /// 作者：简仪科技 
@@ -39,6 +42,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         Queuedata qdata = new Queuedata();
         bool start = false;
         int Chcount;
+        string filepath;
         /// <summary>
         /// 存放readValue转置后的数据，容量与readValue一样
         /// </summary>
@@ -69,12 +73,16 @@ namespace SeeSharpExample.JY.JYUSB62405
         {
             public DateTime logtime;
             public double[,] RawData;
+            public int averageindex;
         }
         private void MainForm_Load(object sender, EventArgs e)
         {
             comboBox_boardNum.SelectedIndex = 0;
             comboBoxSelectChannel.SelectedIndex = 0;
             radioButtonCH0.Checked = true;
+            CreateIfFolderMissing("c:\\MCMCSOT\\FFT");
+            CreateIfFolderMissing("c:\\MCMCSOT\\FFTALARM");
+            filepath = "c:\\MCMCSOT\\FFT\\";
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -227,6 +235,8 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ArrayManipulation.GetArraySubset(qdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch0RawValue, ch0sensivity);
                         Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.None);
+                        File.AppendAllLines(filepath+"1.csv", ch0sprectrumValue.Select(d => d.ToString()).ToArray());
+                        
                     }
                     else if (Chcount == 2)
                     {
@@ -320,6 +330,12 @@ namespace SeeSharpExample.JY.JYUSB62405
                 }
                 
             }
+        }
+        private void CreateIfFolderMissing(string path)
+        {
+            bool folderExists = Directory.Exists(path);
+            if (!folderExists)
+                Directory.CreateDirectory(path);
         }
 
         #endregion=
