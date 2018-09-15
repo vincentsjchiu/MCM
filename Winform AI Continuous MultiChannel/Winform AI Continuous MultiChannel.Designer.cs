@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries3 = new SeeSharpTools.JY.GUI.EasyChartSeries();
-            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries4 = new SeeSharpTools.JY.GUI.EasyChartSeries();
+            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries1 = new SeeSharpTools.JY.GUI.EasyChartSeries();
+            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries2 = new SeeSharpTools.JY.GUI.EasyChartSeries();
             this.easyChartTime = new SeeSharpTools.JY.GUI.EasyChart();
             this.label_SampleRate = new System.Windows.Forms.Label();
             this.label_Channel = new System.Windows.Forms.Label();
@@ -37,13 +37,21 @@
             this.label_RangeHigh = new System.Windows.Forms.Label();
             this.numericUpDown_SampleRate = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_Ch0_Threshold = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown_RangeHigh = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown_averagetimes = new System.Windows.Forms.NumericUpDown();
             this.Start = new System.Windows.Forms.Button();
             this.Stop = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBox_boardNum = new System.Windows.Forms.ComboBox();
             this.groupBox_GenParam = new System.Windows.Forms.GroupBox();
+            this.numericUpDown_CH3_Sensivity = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown_CH2_Sensivity = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown_CH1_Sensivity = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown_CH0_Sensivity = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.comboBoxSelectChannel = new System.Windows.Forms.ComboBox();
             this.easyChartFFT = new SeeSharpTools.JY.GUI.EasyChart();
             this.ipAddressControl1 = new IPAddressControlLib.IPAddressControl();
@@ -58,26 +66,18 @@
             this.radioButtonCH1 = new System.Windows.Forms.RadioButton();
             this.radioButtonCH2 = new System.Windows.Forms.RadioButton();
             this.radioButtonCH3 = new System.Windows.Forms.RadioButton();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.numericUpDown_CH0_Sensivity = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown_CH1_Sensivity = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown_CH2_Sensivity = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown_CH3_Sensivity = new System.Windows.Forms.NumericUpDown();
             this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_SampleRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Ch0_Threshold)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_RangeHigh)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_averagetimes)).BeginInit();
             this.groupBox_GenParam.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH3_Sensivity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH2_Sensivity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH1_Sensivity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH0_Sensivity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Ch1_Threshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Ch2_Threshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Ch3_Threshold)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH0_Sensivity)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH1_Sensivity)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH2_Sensivity)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH3_Sensivity)).BeginInit();
             this.SuspendLayout();
             // 
             // easyChartTime
@@ -111,10 +111,10 @@
             this.easyChartTime.GradientStyle = SeeSharpTools.JY.GUI.EasyChart.EasyChartGradientStyle.None;
             this.easyChartTime.LegendBackColor = System.Drawing.Color.Transparent;
             this.easyChartTime.LegendVisible = true;
-            easyChartSeries3.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
-            easyChartSeries3.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
-            easyChartSeries3.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
-            this.easyChartTime.LineSeries.Add(easyChartSeries3);
+            easyChartSeries1.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
+            easyChartSeries1.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
+            easyChartSeries1.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
+            this.easyChartTime.LineSeries.Add(easyChartSeries1);
             this.easyChartTime.Location = new System.Drawing.Point(63, 69);
             this.easyChartTime.MajorGridColor = System.Drawing.Color.Black;
             this.easyChartTime.MajorGridEnabled = true;
@@ -279,20 +279,20 @@
             0,
             -2147483648});
             // 
-            // numericUpDown_RangeHigh
+            // numericUpDown_averagetimes
             // 
-            this.numericUpDown_RangeHigh.DecimalPlaces = 1;
-            this.numericUpDown_RangeHigh.Location = new System.Drawing.Point(809, 317);
-            this.numericUpDown_RangeHigh.Maximum = new decimal(new int[] {
+            this.numericUpDown_averagetimes.DecimalPlaces = 1;
+            this.numericUpDown_averagetimes.Location = new System.Drawing.Point(809, 317);
+            this.numericUpDown_averagetimes.Maximum = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.numericUpDown_RangeHigh.Name = "numericUpDown_RangeHigh";
-            this.numericUpDown_RangeHigh.Size = new System.Drawing.Size(90, 22);
-            this.numericUpDown_RangeHigh.TabIndex = 8;
-            this.numericUpDown_RangeHigh.Tag = "ParaConfig";
-            this.numericUpDown_RangeHigh.Value = new decimal(new int[] {
+            this.numericUpDown_averagetimes.Name = "numericUpDown_averagetimes";
+            this.numericUpDown_averagetimes.Size = new System.Drawing.Size(90, 22);
+            this.numericUpDown_averagetimes.TabIndex = 8;
+            this.numericUpDown_averagetimes.Tag = "ParaConfig";
+            this.numericUpDown_averagetimes.Value = new decimal(new int[] {
             10,
             0,
             0,
@@ -384,6 +384,142 @@
             this.groupBox_GenParam.TabStop = false;
             this.groupBox_GenParam.Text = "基本参数配置";
             // 
+            // numericUpDown_CH3_Sensivity
+            // 
+            this.numericUpDown_CH3_Sensivity.DecimalPlaces = 1;
+            this.numericUpDown_CH3_Sensivity.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericUpDown_CH3_Sensivity.Location = new System.Drawing.Point(150, 199);
+            this.numericUpDown_CH3_Sensivity.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDown_CH3_Sensivity.Name = "numericUpDown_CH3_Sensivity";
+            this.numericUpDown_CH3_Sensivity.Size = new System.Drawing.Size(90, 22);
+            this.numericUpDown_CH3_Sensivity.TabIndex = 73;
+            this.numericUpDown_CH3_Sensivity.Tag = "ParaConfig";
+            this.numericUpDown_CH3_Sensivity.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown_CH2_Sensivity
+            // 
+            this.numericUpDown_CH2_Sensivity.DecimalPlaces = 1;
+            this.numericUpDown_CH2_Sensivity.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericUpDown_CH2_Sensivity.Location = new System.Drawing.Point(149, 172);
+            this.numericUpDown_CH2_Sensivity.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDown_CH2_Sensivity.Name = "numericUpDown_CH2_Sensivity";
+            this.numericUpDown_CH2_Sensivity.Size = new System.Drawing.Size(90, 22);
+            this.numericUpDown_CH2_Sensivity.TabIndex = 72;
+            this.numericUpDown_CH2_Sensivity.Tag = "ParaConfig";
+            this.numericUpDown_CH2_Sensivity.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown_CH1_Sensivity
+            // 
+            this.numericUpDown_CH1_Sensivity.DecimalPlaces = 1;
+            this.numericUpDown_CH1_Sensivity.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericUpDown_CH1_Sensivity.Location = new System.Drawing.Point(149, 144);
+            this.numericUpDown_CH1_Sensivity.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDown_CH1_Sensivity.Name = "numericUpDown_CH1_Sensivity";
+            this.numericUpDown_CH1_Sensivity.Size = new System.Drawing.Size(90, 22);
+            this.numericUpDown_CH1_Sensivity.TabIndex = 71;
+            this.numericUpDown_CH1_Sensivity.Tag = "ParaConfig";
+            this.numericUpDown_CH1_Sensivity.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown_CH0_Sensivity
+            // 
+            this.numericUpDown_CH0_Sensivity.DecimalPlaces = 1;
+            this.numericUpDown_CH0_Sensivity.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericUpDown_CH0_Sensivity.Location = new System.Drawing.Point(149, 114);
+            this.numericUpDown_CH0_Sensivity.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDown_CH0_Sensivity.Name = "numericUpDown_CH0_Sensivity";
+            this.numericUpDown_CH0_Sensivity.Size = new System.Drawing.Size(90, 22);
+            this.numericUpDown_CH0_Sensivity.TabIndex = 70;
+            this.numericUpDown_CH0_Sensivity.Tag = "ParaConfig";
+            this.numericUpDown_CH0_Sensivity.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label10.Location = new System.Drawing.Point(6, 201);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(140, 14);
+            this.label10.TabIndex = 69;
+            this.label10.Text = "CH3 Sensivity(mv/g)";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label9.Location = new System.Drawing.Point(6, 173);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(140, 14);
+            this.label9.TabIndex = 68;
+            this.label9.Text = "CH2 Sensivity(mv/g)";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label8.Location = new System.Drawing.Point(6, 145);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(140, 14);
+            this.label8.TabIndex = 67;
+            this.label8.Text = "CH1 Sensivity(mv/g)";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label6.Location = new System.Drawing.Point(6, 116);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(140, 14);
+            this.label6.TabIndex = 66;
+            this.label6.Text = "CH0 Sensivity(mv/g)";
+            // 
             // comboBoxSelectChannel
             // 
             this.comboBoxSelectChannel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -430,10 +566,10 @@
             this.easyChartFFT.GradientStyle = SeeSharpTools.JY.GUI.EasyChart.EasyChartGradientStyle.None;
             this.easyChartFFT.LegendBackColor = System.Drawing.Color.Transparent;
             this.easyChartFFT.LegendVisible = true;
-            easyChartSeries4.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
-            easyChartSeries4.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
-            easyChartSeries4.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
-            this.easyChartFFT.LineSeries.Add(easyChartSeries4);
+            easyChartSeries2.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
+            easyChartSeries2.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
+            easyChartSeries2.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
+            this.easyChartFFT.LineSeries.Add(easyChartSeries2);
             this.easyChartFFT.Location = new System.Drawing.Point(63, 315);
             this.easyChartFFT.MajorGridColor = System.Drawing.Color.Black;
             this.easyChartFFT.MajorGridEnabled = true;
@@ -692,142 +828,6 @@
             this.radioButtonCH3.Text = "CH3";
             this.radioButtonCH3.UseVisualStyleBackColor = true;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(6, 116);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(140, 14);
-            this.label6.TabIndex = 66;
-            this.label6.Text = "CH0 Sensivity(mv/g)";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label8.Location = new System.Drawing.Point(6, 145);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(140, 14);
-            this.label8.TabIndex = 67;
-            this.label8.Text = "CH1 Sensivity(mv/g)";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label9.Location = new System.Drawing.Point(6, 173);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(140, 14);
-            this.label9.TabIndex = 68;
-            this.label9.Text = "CH2 Sensivity(mv/g)";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label10.Location = new System.Drawing.Point(6, 201);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(140, 14);
-            this.label10.TabIndex = 69;
-            this.label10.Text = "CH3 Sensivity(mv/g)";
-            // 
-            // numericUpDown_CH0_Sensivity
-            // 
-            this.numericUpDown_CH0_Sensivity.DecimalPlaces = 1;
-            this.numericUpDown_CH0_Sensivity.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numericUpDown_CH0_Sensivity.Location = new System.Drawing.Point(149, 114);
-            this.numericUpDown_CH0_Sensivity.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericUpDown_CH0_Sensivity.Name = "numericUpDown_CH0_Sensivity";
-            this.numericUpDown_CH0_Sensivity.Size = new System.Drawing.Size(90, 22);
-            this.numericUpDown_CH0_Sensivity.TabIndex = 70;
-            this.numericUpDown_CH0_Sensivity.Tag = "ParaConfig";
-            this.numericUpDown_CH0_Sensivity.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDown_CH1_Sensivity
-            // 
-            this.numericUpDown_CH1_Sensivity.DecimalPlaces = 1;
-            this.numericUpDown_CH1_Sensivity.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numericUpDown_CH1_Sensivity.Location = new System.Drawing.Point(149, 144);
-            this.numericUpDown_CH1_Sensivity.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericUpDown_CH1_Sensivity.Name = "numericUpDown_CH1_Sensivity";
-            this.numericUpDown_CH1_Sensivity.Size = new System.Drawing.Size(90, 22);
-            this.numericUpDown_CH1_Sensivity.TabIndex = 71;
-            this.numericUpDown_CH1_Sensivity.Tag = "ParaConfig";
-            this.numericUpDown_CH1_Sensivity.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDown_CH2_Sensivity
-            // 
-            this.numericUpDown_CH2_Sensivity.DecimalPlaces = 1;
-            this.numericUpDown_CH2_Sensivity.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numericUpDown_CH2_Sensivity.Location = new System.Drawing.Point(149, 172);
-            this.numericUpDown_CH2_Sensivity.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericUpDown_CH2_Sensivity.Name = "numericUpDown_CH2_Sensivity";
-            this.numericUpDown_CH2_Sensivity.Size = new System.Drawing.Size(90, 22);
-            this.numericUpDown_CH2_Sensivity.TabIndex = 72;
-            this.numericUpDown_CH2_Sensivity.Tag = "ParaConfig";
-            this.numericUpDown_CH2_Sensivity.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDown_CH3_Sensivity
-            // 
-            this.numericUpDown_CH3_Sensivity.DecimalPlaces = 1;
-            this.numericUpDown_CH3_Sensivity.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.numericUpDown_CH3_Sensivity.Location = new System.Drawing.Point(150, 199);
-            this.numericUpDown_CH3_Sensivity.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericUpDown_CH3_Sensivity.Name = "numericUpDown_CH3_Sensivity";
-            this.numericUpDown_CH3_Sensivity.Size = new System.Drawing.Size(90, 22);
-            this.numericUpDown_CH3_Sensivity.TabIndex = 73;
-            this.numericUpDown_CH3_Sensivity.Tag = "ParaConfig";
-            this.numericUpDown_CH3_Sensivity.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(246, 288);
@@ -861,7 +861,7 @@
             this.Controls.Add(this.numericUpDown_Ch0_Threshold);
             this.Controls.Add(this.Start);
             this.Controls.Add(this.easyChartTime);
-            this.Controls.Add(this.numericUpDown_RangeHigh);
+            this.Controls.Add(this.numericUpDown_averagetimes);
             this.Controls.Add(this.label_RangeHigh);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(994, 602);
@@ -873,16 +873,16 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_SampleRate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Ch0_Threshold)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_RangeHigh)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_averagetimes)).EndInit();
             this.groupBox_GenParam.ResumeLayout(false);
             this.groupBox_GenParam.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH3_Sensivity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH2_Sensivity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH1_Sensivity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH0_Sensivity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Ch1_Threshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Ch2_Threshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Ch3_Threshold)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH0_Sensivity)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH1_Sensivity)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH2_Sensivity)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_CH3_Sensivity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -897,7 +897,7 @@
         private System.Windows.Forms.Label label_RangeHigh;
         private System.Windows.Forms.NumericUpDown numericUpDown_SampleRate;
         private System.Windows.Forms.NumericUpDown numericUpDown_Ch0_Threshold;
-        private System.Windows.Forms.NumericUpDown numericUpDown_RangeHigh;
+        private System.Windows.Forms.NumericUpDown numericUpDown_averagetimes;
         private System.Windows.Forms.Button Start;
         private System.Windows.Forms.Button Stop;
         private System.Windows.Forms.Label label1;

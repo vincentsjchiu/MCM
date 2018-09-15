@@ -37,12 +37,16 @@ namespace SeeSharpExample.JY.JYUSB62405
         double ch0sensivity, ch1sensivity, ch2sensivity, ch3sensivity;
         double[] ch0sprectrumValue, ch1sprectrumValue, ch2sprectrumValue, ch3sprectrumValue;
         double[] ch0RawValue, ch1RawValue, ch2RawValue, ch3RawValue;
+        double[] FFTdf;
         Thread AI, DataQueue;
         Queue<Queuedata> myqueue = new Queue<Queuedata>();
-        Queuedata qdata = new Queuedata();
+        Queuedata qindata = new Queuedata();
+        Queuedata qoutdata = new Queuedata();
         bool start = false;
         int Chcount;
+        int averagetimes;
         string filepath;
+        string csvfilename;
         /// <summary>
         /// 存放readValue转置后的数据，容量与readValue一样
         /// </summary>
@@ -204,7 +208,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         private void Inital()
         {
             readValue = new double[(int)aitask.SampleRate, aitask.Channels.Count];
-            qdata.RawData = new double[(int)aitask.SampleRate, aitask.Channels.Count];
+            qindata.RawData = new double[(int)aitask.SampleRate, aitask.Channels.Count];
             displyValue = new double[aitask.Channels.Count, (int)aitask.SampleRate];
             ch0RawValue = new double[(int)aitask.SampleRate];
             ch1RawValue = new double[(int)aitask.SampleRate];
@@ -214,10 +218,17 @@ namespace SeeSharpExample.JY.JYUSB62405
             ch1sprectrumValue = new double[(int)aitask.SampleRate/2];
             ch2sprectrumValue = new double[(int)aitask.SampleRate/2];
             ch3sprectrumValue = new double[(int)aitask.SampleRate/2];
+            FFTdf = new double[(int)aitask.SampleRate / 2];
             ch0sensivity =1000/ Convert.ToDouble(numericUpDown_CH0_Sensivity.Value);
             ch1sensivity =1000/ Convert.ToDouble(numericUpDown_CH1_Sensivity.Value);
             ch2sensivity =1000/ Convert.ToDouble(numericUpDown_CH2_Sensivity.Value);
             ch3sensivity =1000/ Convert.ToDouble(numericUpDown_CH3_Sensivity.Value);
+            for(int i=0;i< ch0sprectrumValue.GetLongLength(0);i++)
+            {
+                FFTdf[i] = i;
+            }
+            averagetimes = Convert.ToInt16(numericUpDown_averagetimes);
+            qindata.averageindex = 0;
         }
         private void ProcessQueue()
         {
@@ -226,53 +237,66 @@ namespace SeeSharpExample.JY.JYUSB62405
                 Thread.Sleep(1);
                 if (myqueue.Count > 0)
                 {
-                    qdata = myqueue.Dequeue();
-
+                    qoutdata = myqueue.Dequeue();
+                    if(qoutdata.averageindex==1)
+                    {
+                        csvfilename = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss_ffff");
+                    }
                     //显示波形需要做一次转置
 
                     if (Chcount == 1)
                     {
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch0RawValue, ch0sensivity);
                         Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.None);
-                        File.AppendAllLines(filepath+"1.csv", ch0sprectrumValue.Select(d => d.ToString()).ToArray());
-                        
+                        ///File.AppendAllLines(filepath+"1.csv", ch0sprectrumValue.Select(d => d.ToString()).ToArray());
+                        CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue);
+
                     }
                     else if (Chcount == 2)
                     {
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch0RawValue, ch0sensivity);
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 1, ref ch1RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 1, ref ch1RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch1RawValue, ch1sensivity);
                         Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.None);
                         Spectrum.PowerSpectrum(ch1RawValue, aitask.SampleRate, ref ch1sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
+                        CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue);
+                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue);
                     }
                     else if (Chcount == 3)
                     {
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch0RawValue, ch0sensivity);
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 1, ref ch1RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 1, ref ch1RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch1RawValue, ch1sensivity);
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 2, ref ch2RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 2, ref ch2RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch2RawValue, ch2sensivity);
                         Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.None);
                         Spectrum.PowerSpectrum(ch1RawValue, aitask.SampleRate, ref ch1sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         Spectrum.PowerSpectrum(ch2RawValue, aitask.SampleRate, ref ch2sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
+                        CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue);
+                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue);
+                        CsvData(filepath, "CH2", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue);
                     }
                     else
                     {
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch0RawValue, ch0sensivity);
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 1, ref ch1RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 1, ref ch1RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch1RawValue, ch1sensivity);
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 2, ref ch2RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 2, ref ch2RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch2RawValue, ch2sensivity);
-                        ArrayManipulation.GetArraySubset(qdata.RawData, 3, ref ch3RawValue, ArrayManipulation.IndexType.column);
+                        ArrayManipulation.GetArraySubset(qoutdata.RawData, 3, ref ch3RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch3RawValue, ch3sensivity);
                         Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.None);
                         Spectrum.PowerSpectrum(ch1RawValue, aitask.SampleRate, ref ch1sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         Spectrum.PowerSpectrum(ch2RawValue, aitask.SampleRate, ref ch2sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         Spectrum.PowerSpectrum(ch3RawValue, aitask.SampleRate, ref ch3sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
+                        CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue);
+                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue);
+                        CsvData(filepath, "CH2", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue);
+                        CsvData(filepath, "CH3", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch3sprectrumValue);
                     }
 
                     this.Invoke((MethodInvoker)delegate
@@ -308,7 +332,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             Chcount = comboBoxSelectChannel.SelectedIndex + 1;
             for (int i = 0; i < Chcount; i++)
             {
-                aitask.AddChannel(i, (double)numericUpDown_Ch0_Threshold.Value, (double)numericUpDown_RangeHigh.Value, Coupling.AC, AITerminal.Differential, true);
+                aitask.AddChannel(i, (double)numericUpDown_Ch0_Threshold.Value, (double)numericUpDown_averagetimes.Value, Coupling.AC, AITerminal.Differential, true);
             }
 
             //基本参数配置
@@ -322,11 +346,16 @@ namespace SeeSharpExample.JY.JYUSB62405
                 Thread.Sleep(1);
                 if (aitask.AvailableSamples >= (int)aitask.SampleRate)
                 {
-                    qdata = new Queuedata();
+                    qindata = new Queuedata();
                     aitask.ReadData(ref readValue, (int)aitask.SampleRate, -1);
-                    qdata.logtime = DateTime.Now;
-                    qdata.RawData = MVAFW.TestItemColls.GenericCopier<double[,]>.DeepCopy(readValue);
-                    myqueue.Enqueue(qdata);
+                    qindata.averageindex++;
+                    if (qindata.averageindex>averagetimes)
+                    {
+                        qindata.averageindex = 0;
+                    }
+                    qindata.logtime = DateTime.Now;
+                    qindata.RawData = MVAFW.TestItemColls.GenericCopier<double[,]>.DeepCopy(readValue);
+                    myqueue.Enqueue(qindata);
                 }
                 
             }
@@ -336,6 +365,18 @@ namespace SeeSharpExample.JY.JYUSB62405
             bool folderExists = Directory.Exists(path);
             if (!folderExists)
                 Directory.CreateDirectory(path);
+        }
+        private void CsvData(string filepath, string channel, string filename, int index, DateTime time, double[] indexf, double[] FFTData)
+        {
+            if (index == 1)
+            {
+                File.AppendAllText(filepath + channel + filename + ".csv", "Hz," + string.Join(",", indexf) + "\n");
+                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff") + string.Join(",", FFTData) + "\n");
+            }
+            else
+            {
+                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff") + string.Join(",", FFTData) + "\n");
+            }
         }
 
         #endregion=
