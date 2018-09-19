@@ -17,6 +17,6 @@ D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\SeeSharpExa
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\Winform AI Continuous MultiChannel.csproj.GenerateResource.Cache
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\f_AICont.exe
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\f_AICont.pdb
-D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\Winform AI Continuous MultiChannel.csprojResolveAssemblyReference.cache
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.File.dll
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpTools.JY.File.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\Winform AI Continuous MultiChannel.csprojResolveAssemblyReference.cache

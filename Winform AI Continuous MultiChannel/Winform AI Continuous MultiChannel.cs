@@ -36,6 +36,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         double df;
         double ch0sensivity, ch1sensivity, ch2sensivity, ch3sensivity;
         double[] ch0sprectrumValue, ch1sprectrumValue, ch2sprectrumValue, ch3sprectrumValue;
+        double[] ch0averagesprectrumValue, ch1averagesprectrumValue, ch2averagesprectrumValue, ch3averagesprectrumValue;
         double[] ch0RawValue, ch1RawValue, ch2RawValue, ch3RawValue;
         double[] FFTdf;
         Thread AI, DataQueue;
@@ -44,7 +45,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         Queuedata qoutdata = new Queuedata();
         bool start = false;
         int Chcount;
-        int averagetimes;
+        int averagetimes,averagecountindex;
         string filepath;
         string csvfilename;
         /// <summary>
@@ -218,6 +219,10 @@ namespace SeeSharpExample.JY.JYUSB62405
             ch1sprectrumValue = new double[(int)aitask.SampleRate/2];
             ch2sprectrumValue = new double[(int)aitask.SampleRate/2];
             ch3sprectrumValue = new double[(int)aitask.SampleRate/2];
+            ch0averagesprectrumValue = new double[(int)aitask.SampleRate / 2];
+            ch1averagesprectrumValue = new double[(int)aitask.SampleRate / 2];
+            ch2averagesprectrumValue = new double[(int)aitask.SampleRate / 2];
+            ch3averagesprectrumValue = new double[(int)aitask.SampleRate / 2];
             FFTdf = new double[(int)aitask.SampleRate / 2];
             ch0sensivity =1000/ Convert.ToDouble(numericUpDown_CH0_Sensivity.Value);
             ch1sensivity =1000/ Convert.ToDouble(numericUpDown_CH1_Sensivity.Value);
@@ -227,8 +232,12 @@ namespace SeeSharpExample.JY.JYUSB62405
             {
                 FFTdf[i] = i;
             }
-            averagetimes = Convert.ToInt16(numericUpDown_averagetimes);
-            qindata.averageindex = 0;
+            averagetimes = Convert.ToInt16(numericUpDown_averagetimes.Value);
+            averagecountindex = 0;
+            ch0averagesprectrumValue=Enumerable.Repeat(0.0, (int)ch0averagesprectrumValue.GetLength(0)).ToArray();
+            ch1averagesprectrumValue = Enumerable.Repeat(0.0, (int)ch1averagesprectrumValue.GetLength(0)).ToArray();
+            ch2averagesprectrumValue = Enumerable.Repeat(0.0, (int)ch2averagesprectrumValue.GetLength(0)).ToArray();
+            ch3averagesprectrumValue = Enumerable.Repeat(0.0, (int)ch3averagesprectrumValue.GetLength(0)).ToArray();
         }
         private void ProcessQueue()
         {
@@ -240,17 +249,17 @@ namespace SeeSharpExample.JY.JYUSB62405
                     qoutdata = myqueue.Dequeue();
                     if(qoutdata.averageindex==1)
                     {
-                        csvfilename = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss_ffff");
+                        csvfilename = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss");
                     }
                     //显示波形需要做一次转置
 
                     if (Chcount == 1)
                     {
                         ArrayManipulation.GetArraySubset(qoutdata.RawData, 0, ref ch0RawValue, ArrayManipulation.IndexType.column);
-                        ArrayCalculation.MultiplyScale(ref ch0RawValue, ch0sensivity);
-                        Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.None);
-                        ///File.AppendAllLines(filepath+"1.csv", ch0sprectrumValue.Select(d => d.ToString()).ToArray());
-                        CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue);
+                        ArrayCalculation.MultiplyScale(ref ch0RawValue, ch0sensivity);                     
+                        Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
+                        specreumaverage(0, qoutdata.averageindex, ch0sprectrumValue);
+                        CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue,ch0averagesprectrumValue);
 
                     }
                     else if (Chcount == 2)
@@ -259,10 +268,12 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ArrayCalculation.MultiplyScale(ref ch0RawValue, ch0sensivity);
                         ArrayManipulation.GetArraySubset(qoutdata.RawData, 1, ref ch1RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch1RawValue, ch1sensivity);
-                        Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.None);
+                        Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         Spectrum.PowerSpectrum(ch1RawValue, aitask.SampleRate, ref ch1sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
-                        CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue);
-                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue);
+                        specreumaverage(0, qoutdata.averageindex, ch0sprectrumValue);
+                        specreumaverage(1, qoutdata.averageindex, ch1sprectrumValue);
+                        CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue,ch0averagesprectrumValue);
+                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue,ch1averagesprectrumValue);
                     }
                     else if (Chcount == 3)
                     {
@@ -272,12 +283,15 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ArrayCalculation.MultiplyScale(ref ch1RawValue, ch1sensivity);
                         ArrayManipulation.GetArraySubset(qoutdata.RawData, 2, ref ch2RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch2RawValue, ch2sensivity);
-                        Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.None);
+                        Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         Spectrum.PowerSpectrum(ch1RawValue, aitask.SampleRate, ref ch1sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         Spectrum.PowerSpectrum(ch2RawValue, aitask.SampleRate, ref ch2sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
-                        CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue);
-                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue);
-                        CsvData(filepath, "CH2", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue);
+                        specreumaverage(0, qoutdata.averageindex, ch0sprectrumValue);
+                        specreumaverage(1, qoutdata.averageindex, ch1sprectrumValue);
+                        specreumaverage(2, qoutdata.averageindex, ch2sprectrumValue);
+                        CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue,ch0averagesprectrumValue);
+                        CsvData(filepath, "CH1_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue,ch1averagesprectrumValue);
+                        CsvData(filepath, "CH2_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue,ch2averagesprectrumValue);
                     }
                     else
                     {
@@ -289,14 +303,18 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ArrayCalculation.MultiplyScale(ref ch2RawValue, ch2sensivity);
                         ArrayManipulation.GetArraySubset(qoutdata.RawData, 3, ref ch3RawValue, ArrayManipulation.IndexType.column);
                         ArrayCalculation.MultiplyScale(ref ch3RawValue, ch3sensivity);
-                        Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.None);
+                        Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         Spectrum.PowerSpectrum(ch1RawValue, aitask.SampleRate, ref ch1sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         Spectrum.PowerSpectrum(ch2RawValue, aitask.SampleRate, ref ch2sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         Spectrum.PowerSpectrum(ch3RawValue, aitask.SampleRate, ref ch3sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
-                        CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue);
-                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue);
-                        CsvData(filepath, "CH2", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue);
-                        CsvData(filepath, "CH3", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch3sprectrumValue);
+                        specreumaverage(0, qoutdata.averageindex, ch0sprectrumValue);
+                        specreumaverage(1, qoutdata.averageindex, ch1sprectrumValue);
+                        specreumaverage(2, qoutdata.averageindex, ch2sprectrumValue);
+                        specreumaverage(3, qoutdata.averageindex, ch3sprectrumValue);
+                        CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue,ch0averagesprectrumValue);
+                        CsvData(filepath, "CH1_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue,ch1averagesprectrumValue);
+                        CsvData(filepath, "CH2_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue,ch2averagesprectrumValue);
+                        CsvData(filepath, "CH3_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch3sprectrumValue,ch3averagesprectrumValue);
                     }
 
                     this.Invoke((MethodInvoker)delegate
@@ -348,11 +366,14 @@ namespace SeeSharpExample.JY.JYUSB62405
                 {
                     qindata = new Queuedata();
                     aitask.ReadData(ref readValue, (int)aitask.SampleRate, -1);
-                    qindata.averageindex++;
-                    if (qindata.averageindex>averagetimes)
+                                      
+                    if (averagecountindex >= averagetimes)
                     {
-                        qindata.averageindex = 0;
+                       
+                        averagecountindex = 0;
                     }
+                    averagecountindex++;
+                    qindata.averageindex = averagecountindex;
                     qindata.logtime = DateTime.Now;
                     qindata.RawData = MVAFW.TestItemColls.GenericCopier<double[,]>.DeepCopy(readValue);
                     myqueue.Enqueue(qindata);
@@ -366,17 +387,97 @@ namespace SeeSharpExample.JY.JYUSB62405
             if (!folderExists)
                 Directory.CreateDirectory(path);
         }
-        private void CsvData(string filepath, string channel, string filename, int index, DateTime time, double[] indexf, double[] FFTData)
+        private void CsvData(string filepath, string channel, string filename, int index, DateTime time, double[] indexf, double[] FFTData,double[]FFTaverage)
         {
             if (index == 1)
             {
                 File.AppendAllText(filepath + channel + filename + ".csv", "Hz," + string.Join(",", indexf) + "\n");
-                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff") + string.Join(",", FFTData) + "\n");
+                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff")+"," + string.Join(",", FFTData) + "\n");
+            }
+            else if(index==averagetimes)
+            {
+                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff") + "," + string.Join(",", FFTData) + "\n");
+                File.AppendAllText(filepath + channel + filename + ".csv", "Average" + "," + string.Join(",", FFTaverage) + "\n");
             }
             else
             {
-                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff") + string.Join(",", FFTData) + "\n");
+                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff") +","+ string.Join(",", FFTData) + "\n");
             }
+        }
+        private void specreumaverage(int channel,int index ,double[] FFTData)
+        {
+            switch(channel)
+            {
+                case 0:
+                    if(index==1)
+                    {
+                        ch0averagesprectrumValue = Enumerable.Repeat(0.0, (int)ch0averagesprectrumValue.GetLength(0)).ToArray();
+                    }
+                    for (int i = 0; i < FFTData.GetLength(0); i++)
+                    {
+                        ch0averagesprectrumValue[i] = ch0averagesprectrumValue[i] + FFTData[i];
+                    } 
+                    if(index==averagetimes)
+                    {
+                        for (int i = 0; i < ch0averagesprectrumValue.GetLength(0); i++)
+                        {
+                            ch0averagesprectrumValue[i] = ch0averagesprectrumValue[i]/ averagetimes;
+                        }
+                    }             
+                    break;
+                case 1:
+                    if (index == 1)
+                    {
+                        ch1averagesprectrumValue = Enumerable.Repeat(0.0, (int)ch1averagesprectrumValue.GetLength(0)).ToArray();
+                    }
+                    for (int i = 0; i < FFTData.GetLength(0); i++)
+                    {
+                        ch1averagesprectrumValue[i] = ch1averagesprectrumValue[i] + FFTData[i];
+                    }
+                    if (index == averagetimes)
+                    {
+                        for (int i = 0; i < ch1averagesprectrumValue.GetLength(0); i++)
+                        {
+                            ch1averagesprectrumValue[i] = ch1averagesprectrumValue[i] / averagetimes;
+                        }
+                    }
+                    break;
+                case 2:
+                    if (index == 1)
+                    {
+                        ch2averagesprectrumValue = Enumerable.Repeat(0.0, (int)ch2averagesprectrumValue.GetLength(0)).ToArray();
+                    }
+                    for (int i = 0; i < FFTData.GetLength(0); i++)
+                    {
+                        ch2averagesprectrumValue[i] = ch2averagesprectrumValue[i] + FFTData[i];
+                    }
+                    if (index == averagetimes)
+                    {
+                        for (int i = 0; i < ch2averagesprectrumValue.GetLength(0); i++)
+                        {
+                            ch2averagesprectrumValue[i] = ch2averagesprectrumValue[i] / averagetimes;
+                        }
+                    }
+                    break;
+                case 3:
+                    if (index == 1)
+                    {
+                        ch3averagesprectrumValue = Enumerable.Repeat(0.0, (int)ch3averagesprectrumValue.GetLength(0)).ToArray();
+                    }
+                    for (int i = 0; i < FFTData.GetLength(0); i++)
+                    {
+                        ch3averagesprectrumValue[i] = ch3averagesprectrumValue[i] + FFTData[i];
+                    }
+                    if (index == averagetimes)
+                    {
+                        for (int i = 0; i < ch3averagesprectrumValue.GetLength(0); i++)
+                        {
+                            ch3averagesprectrumValue[i] = ch3averagesprectrumValue[i] / averagetimes;
+                        }
+                    }
+                    break;
+            }
+
         }
 
         #endregion=
