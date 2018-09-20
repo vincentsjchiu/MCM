@@ -44,6 +44,14 @@
             this.label7 = new System.Windows.Forms.Label();
             this.comboBox_boardNum = new System.Windows.Forms.ComboBox();
             this.groupBox_GenParam = new System.Windows.Forms.GroupBox();
+            this.textBoxch3name = new System.Windows.Forms.TextBox();
+            this.textBoxch2name = new System.Windows.Forms.TextBox();
+            this.textBoxch1name = new System.Windows.Forms.TextBox();
+            this.textBoxch0name = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.numericUpDown_CH3_Sensivity = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_CH2_Sensivity = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_CH1_Sensivity = new System.Windows.Forms.NumericUpDown();
@@ -67,6 +75,8 @@
             this.radioButtonCH2 = new System.Windows.Forms.RadioButton();
             this.radioButtonCH3 = new System.Windows.Forms.RadioButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBoxmachinename = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_SampleRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Ch0_Threshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_averagetimes)).BeginInit();
@@ -363,6 +373,14 @@
             // 
             // groupBox_GenParam
             // 
+            this.groupBox_GenParam.Controls.Add(this.textBoxch3name);
+            this.groupBox_GenParam.Controls.Add(this.textBoxch2name);
+            this.groupBox_GenParam.Controls.Add(this.textBoxch1name);
+            this.groupBox_GenParam.Controls.Add(this.textBoxch0name);
+            this.groupBox_GenParam.Controls.Add(this.label14);
+            this.groupBox_GenParam.Controls.Add(this.label13);
+            this.groupBox_GenParam.Controls.Add(this.label12);
+            this.groupBox_GenParam.Controls.Add(this.label11);
             this.groupBox_GenParam.Controls.Add(this.numericUpDown_CH3_Sensivity);
             this.groupBox_GenParam.Controls.Add(this.numericUpDown_CH2_Sensivity);
             this.groupBox_GenParam.Controls.Add(this.numericUpDown_CH1_Sensivity);
@@ -379,10 +397,78 @@
             this.groupBox_GenParam.Controls.Add(this.numericUpDown_SampleRate);
             this.groupBox_GenParam.Location = new System.Drawing.Point(685, 55);
             this.groupBox_GenParam.Name = "groupBox_GenParam";
-            this.groupBox_GenParam.Size = new System.Drawing.Size(269, 225);
+            this.groupBox_GenParam.Size = new System.Drawing.Size(437, 225);
             this.groupBox_GenParam.TabIndex = 65;
             this.groupBox_GenParam.TabStop = false;
             this.groupBox_GenParam.Text = "基本参数配置";
+            // 
+            // textBoxch3name
+            // 
+            this.textBoxch3name.Location = new System.Drawing.Point(314, 200);
+            this.textBoxch3name.Name = "textBoxch3name";
+            this.textBoxch3name.Size = new System.Drawing.Size(100, 22);
+            this.textBoxch3name.TabIndex = 82;
+            // 
+            // textBoxch2name
+            // 
+            this.textBoxch2name.Location = new System.Drawing.Point(314, 173);
+            this.textBoxch2name.Name = "textBoxch2name";
+            this.textBoxch2name.Size = new System.Drawing.Size(100, 22);
+            this.textBoxch2name.TabIndex = 81;
+            // 
+            // textBoxch1name
+            // 
+            this.textBoxch1name.Location = new System.Drawing.Point(314, 144);
+            this.textBoxch1name.Name = "textBoxch1name";
+            this.textBoxch1name.Size = new System.Drawing.Size(100, 22);
+            this.textBoxch1name.TabIndex = 80;
+            // 
+            // textBoxch0name
+            // 
+            this.textBoxch0name.Location = new System.Drawing.Point(314, 113);
+            this.textBoxch0name.Name = "textBoxch0name";
+            this.textBoxch0name.Size = new System.Drawing.Size(100, 22);
+            this.textBoxch0name.TabIndex = 79;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label14.Location = new System.Drawing.Point(245, 202);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(63, 14);
+            this.label14.TabIndex = 77;
+            this.label14.Text = "CH3 Name";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label13.Location = new System.Drawing.Point(245, 174);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(63, 14);
+            this.label13.TabIndex = 76;
+            this.label13.Text = "CH2 Name";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label12.Location = new System.Drawing.Point(245, 146);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(63, 14);
+            this.label12.TabIndex = 75;
+            this.label12.Text = "CH1 Name";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label11.Location = new System.Drawing.Point(245, 116);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(63, 14);
+            this.label11.TabIndex = 74;
+            this.label11.Text = "CH0 Name";
             // 
             // numericUpDown_CH3_Sensivity
             // 
@@ -835,11 +921,30 @@
             this.textBox1.Size = new System.Drawing.Size(100, 22);
             this.textBox1.TabIndex = 74;
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label15.Location = new System.Drawing.Point(691, 20);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(91, 14);
+            this.label15.TabIndex = 83;
+            this.label15.Text = "Machine Name";
+            // 
+            // textBoxmachinename
+            // 
+            this.textBoxmachinename.Location = new System.Drawing.Point(825, 19);
+            this.textBoxmachinename.Name = "textBoxmachinename";
+            this.textBoxmachinename.Size = new System.Drawing.Size(100, 22);
+            this.textBoxmachinename.TabIndex = 84;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(978, 537);
+            this.ClientSize = new System.Drawing.Size(1134, 549);
+            this.Controls.Add(this.textBoxmachinename);
+            this.Controls.Add(this.label15);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.radioButtonCH3);
             this.Controls.Add(this.radioButtonCH2);
@@ -864,7 +969,7 @@
             this.Controls.Add(this.numericUpDown_averagetimes);
             this.Controls.Add(this.label_RangeHigh);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(994, 602);
+            this.MaximumSize = new System.Drawing.Size(2000, 602);
             this.MinimumSize = new System.Drawing.Size(638, 382);
             this.Name = "MainForm";
             this.Text = "MCM-100多通道连续采集";
@@ -927,6 +1032,16 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxch3name;
+        private System.Windows.Forms.TextBox textBoxch2name;
+        private System.Windows.Forms.TextBox textBoxch1name;
+        private System.Windows.Forms.TextBox textBoxch0name;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBoxmachinename;
     }
 }
 

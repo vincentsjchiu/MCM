@@ -60,6 +60,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\SeeSharp\JYTEK\Hardware\DSA\JYUSB62405\Bin\JYUSB62405.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>.\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SeeSharpTools.JY.ArrayUtility">
       <HintPath>C:\SeeSharp\JYTEK\SeeSharpTools\Bin\SeeSharpTools.JY.ArrayUtility.dll</HintPath>
     </Reference>
