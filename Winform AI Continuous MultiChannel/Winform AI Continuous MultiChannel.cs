@@ -10,6 +10,10 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using uPLibrary.Networking.M2Mqtt;
+using uPLibrary.Networking.M2Mqtt.Messages;
+using System.Text;
+using System.Net;
 /// <summary>
 /// JYUSB62405多通道连续采集
 /// 作者：简仪科技 
@@ -57,6 +61,8 @@ namespace SeeSharpExample.JY.JYUSB62405
         string csvfilename;
         string ch0name, ch1name, ch2name, ch3name;
         string machinename;
+        string broker_ip;
+        MqttClient mqtt_client;
         JObject fftaveragedata = new JObject();
         JObject topicName = new JObject();
         JArray ch0fftaveragedata = new JArray();
@@ -103,6 +109,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             CreateIfFolderMissing("c:\\MCMCSOT\\FFT");
             CreateIfFolderMissing("c:\\MCMCSOT\\FFTALARM");
             filepath = "c:\\MCMCSOT\\FFT\\";
+            ReadConfiguartion();
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -165,6 +172,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             Start.Enabled = false;
             ConfigDAQ();
             Inital();
+            IniMqtt();
             aitask.Start();
             start = true;
             AI = new Thread(GetData);
@@ -284,9 +292,9 @@ namespace SeeSharpExample.JY.JYUSB62405
                         Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         spectrumcalculation(1, qoutdata.averageindex, ch0sprectrumValue);
                         CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
-                        if (qoutdata.averageindex==averagetimes)
+                        if (qoutdata.averageindex == averagetimes)
                         {
-                        WriteChannelData(1);
+                            WriteChannelData(1);
                         }
 
                     }
@@ -467,7 +475,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ch0maxfftindex = ch0averagesprectrumValue.ToList().IndexOf(ch0averagesprectrumMaxValue);
                         ch0averagesprectrumMinValue = ch0averagesprectrumValue.Min();
                         ch0minfftindex = ch0averagesprectrumValue.ToList().IndexOf(ch0averagesprectrumMinValue);
-                        if(ch0averagesprectrumMaxValue>Convert.ToDouble(numericUpDown_Ch0_Threshold.Value))
+                        if (ch0averagesprectrumMaxValue > Convert.ToDouble(numericUpDown_Ch0_Threshold.Value))
                         {
                             ch0alarmstatus = true;
                         }
@@ -581,39 +589,42 @@ namespace SeeSharpExample.JY.JYUSB62405
                 topicName["MsgTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
                 topicName["EquipmentId"] = machinename;
                 topicName["BandWidth"] = aitask.SampleRate / 2;
-                topicName["FreqencyRes"] = aitask.SampleRate / aitask.Channels.Count;
+                topicName["FreqencyRes"] = aitask.SampleRate / aitask.SampleRate;
                 switch (channelcount)
                 {
                     case 1:
                         topicName["ChannelCnt"] = channelcount;
                         topicName["CH0_Name"] = ch0name;
-                        topicName["CH0_AmpMaxFreq_Value"] =ch0maxfftindex ;
+                        topicName["CH0_AmpMaxFreq_Value"] = ch0maxfftindex;
                         topicName["CH0_AmpMaxFreq_Unit"] = "Hz";
                         topicName["CH0_AmpMinFreq_Value"] = ch0minfftindex;
                         topicName["CH0_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH0_AmpMinFreq_Unit"] = "g rms";
-                        topicName["CH0_AlarmStatus"] =Convert.ToInt32(ch0alarmstatus);
-                        if(ch0alarmstatus)
-                        { 
-                        topicName["CH0_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                        topicName["CH0_AlarmAmpthreshold_Value"] =numericUpDown_Ch0_Threshold.Value;
-                        topicName["CH0_AlarmAmpthreshold_Unit"] ="g rms";
-                        topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
-                        topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
-                        topicName["CH0_AlarmFreq_Unit"] ="Hz";
+                        topicName["CH0_AlarmStatus"] = Convert.ToInt32(ch0alarmstatus);
+                        if (ch0alarmstatus)
+                        {
+                            topicName["CH0_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
+                            topicName["CH0_AlarmAmpthreshold_Value"] = numericUpDown_Ch0_Threshold.Value;
+                            topicName["CH0_AlarmAmpthreshold_Unit"] = "g rms";
+                            topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
+                            topicName["CH0_AlarmAmp_Unit"] = "g rms";
+                            topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
+                            topicName["CH0_AlarmFreq_Unit"] = "Hz";
                         }
                         else
                         {
                             topicName["CH0_AlarmTimestamp"] = "";
-                            topicName["CH0_AlarmAmpthreshold_Value"] =0;
+                            topicName["CH0_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH0_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH0_AlarmAmp_Value"] = 0;
+                            topicName["CH0_AlarmAmp_Unit"] = "";
                             topicName["CH0_AlarmFreq_Value"] = 0;
                             topicName["CH0_AlarmFreq_Unit"] = "";
                         }
                         ch0fftaveragedata.Add(JArray.FromObject(ch0averagesprectrumValue));
                         fftaveragedata["CH0_Amplitude"] = ch0fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
+                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                     case 2:
                         topicName["ChannelCnt"] = channelcount;
@@ -622,7 +633,6 @@ namespace SeeSharpExample.JY.JYUSB62405
                         topicName["CH0_AmpMaxFreq_Unit"] = "Hz";
                         topicName["CH0_AmpMinFreq_Value"] = ch0minfftindex;
                         topicName["CH0_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH0_AmpMinFreq_Unit"] = "g rms";
                         topicName["CH0_AlarmStatus"] = Convert.ToInt32(ch0alarmstatus);
                         if (ch0alarmstatus)
                         {
@@ -630,6 +640,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH0_AlarmAmpthreshold_Value"] = numericUpDown_Ch0_Threshold.Value;
                             topicName["CH0_AlarmAmpthreshold_Unit"] = "g rms";
                             topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
+                            topicName["CH0_AlarmAmp_Unit"] = "g rms";
                             topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
                             topicName["CH0_AlarmFreq_Unit"] = "Hz";
                         }
@@ -639,15 +650,15 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH0_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH0_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH0_AlarmAmp_Value"] = 0;
+                            topicName["CH0_AlarmAmp_Unit"] = "";
                             topicName["CH0_AlarmFreq_Value"] = 0;
                             topicName["CH0_AlarmFreq_Unit"] = "";
-                        }                     
+                        }
                         topicName["CH1_Name"] = ch1name;
                         topicName["CH1_AmpMaxFreq_Value"] = ch1maxfftindex;
                         topicName["CH1_AmpMaxFreq_Unit"] = "Hz";
                         topicName["CH1_AmpMinFreq_Value"] = ch1minfftindex;
                         topicName["CH1_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH1_AmpMinFreq_Unit"] = "g rms";
                         topicName["CH1_AlarmStatus"] = Convert.ToInt32(ch1alarmstatus);
                         if (ch1alarmstatus)
                         {
@@ -655,6 +666,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH1_AlarmAmpthreshold_Value"] = numericUpDown_Ch1_Threshold.Value;
                             topicName["CH1_AlarmAmpthreshold_Unit"] = "g rms";
                             topicName["CH1_AlarmAmp_Value"] = ch1averagesprectrumMaxValue;
+                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
                             topicName["CH1_AlarmFreq_Value"] = ch1maxfftindex;
                             topicName["CH1_AlarmFreq_Unit"] = "Hz";
                         }
@@ -664,6 +676,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH1_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH1_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH1_AlarmAmp_Value"] = 0;
+                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
                             topicName["CH1_AlarmFreq_Value"] = 0;
                             topicName["CH1_AlarmFreq_Unit"] = "";
                         }
@@ -672,6 +685,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ch1fftaveragedata.Add(JArray.FromObject(ch1averagesprectrumValue));
                         fftaveragedata["CH1_Amplitude"] = ch1fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
+                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
                         break;
                     case 3:
                         topicName["ChannelCnt"] = channelcount;
@@ -680,7 +694,6 @@ namespace SeeSharpExample.JY.JYUSB62405
                         topicName["CH0_AmpMaxFreq_Unit"] = "Hz";
                         topicName["CH0_AmpMinFreq_Value"] = ch0minfftindex;
                         topicName["CH0_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH0_AmpMinFreq_Unit"] = "g rms";
                         topicName["CH0_AlarmStatus"] = Convert.ToInt32(ch0alarmstatus);
                         if (ch0alarmstatus)
                         {
@@ -688,6 +701,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH0_AlarmAmpthreshold_Value"] = numericUpDown_Ch0_Threshold.Value;
                             topicName["CH0_AlarmAmpthreshold_Unit"] = "g rms";
                             topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
+                            topicName["CH0_AlarmAmp_Unit"] = "g rms";
                             topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
                             topicName["CH0_AlarmFreq_Unit"] = "Hz";
                         }
@@ -697,6 +711,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH0_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH0_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH0_AlarmAmp_Value"] = 0;
+                            topicName["CH0_AlarmAmp_Unit"] = "";
                             topicName["CH0_AlarmFreq_Value"] = 0;
                             topicName["CH0_AlarmFreq_Unit"] = "";
                         }
@@ -713,6 +728,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH1_AlarmAmpthreshold_Value"] = numericUpDown_Ch1_Threshold.Value;
                             topicName["CH1_AlarmAmpthreshold_Unit"] = "g rms";
                             topicName["CH1_AlarmAmp_Value"] = ch1averagesprectrumMaxValue;
+                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
                             topicName["CH1_AlarmFreq_Value"] = ch1maxfftindex;
                             topicName["CH1_AlarmFreq_Unit"] = "Hz";
                         }
@@ -722,6 +738,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH1_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH1_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH1_AlarmAmp_Value"] = 0;
+                            topicName["CH1_AlarmAmp_Unit"] = "";
                             topicName["CH1_AlarmFreq_Value"] = 0;
                             topicName["CH1_AlarmFreq_Unit"] = "";
                         }
@@ -738,6 +755,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH2_AlarmAmpthreshold_Value"] = numericUpDown_Ch2_Threshold.Value;
                             topicName["CH2_AlarmAmpthreshold_Unit"] = "g rms";
                             topicName["CH2_AlarmAmp_Value"] = ch2averagesprectrumMaxValue;
+                            topicName["CH2_AlarmAmp_Unit"] = "g rms";
                             topicName["CH2_AlarmFreq_Value"] = ch2maxfftindex;
                             topicName["CH2_AlarmFreq_Unit"] = "Hz";
                         }
@@ -747,6 +765,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH2_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH2_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH2_AlarmAmp_Value"] = 0;
+                            topicName["CH2_AlarmAmp_Unit"] = "";
                             topicName["CH2_AlarmFreq_Value"] = 0;
                             topicName["CH2_AlarmFreq_Unit"] = "";
                         }
@@ -757,6 +776,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ch2fftaveragedata.Add(JArray.FromObject(ch2averagesprectrumValue));
                         fftaveragedata["CH2_Amplitude"] = ch2fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
+                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
                         break;
                     case 4:
                         topicName["ChannelCnt"] = channelcount;
@@ -773,6 +793,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH0_AlarmAmpthreshold_Value"] = numericUpDown_Ch0_Threshold.Value;
                             topicName["CH0_AlarmAmpthreshold_Unit"] = "g rms";
                             topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
+                            topicName["CH0_AlarmAmp_Unit"] = "g rms";
                             topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
                             topicName["CH0_AlarmFreq_Unit"] = "Hz";
                         }
@@ -782,6 +803,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH0_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH0_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH0_AlarmAmp_Value"] = 0;
+                            topicName["CH0_AlarmAmp_Unit"] = "";
                             topicName["CH0_AlarmFreq_Value"] = 0;
                             topicName["CH0_AlarmFreq_Unit"] = "";
                         }
@@ -798,6 +820,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH1_AlarmAmpthreshold_Value"] = numericUpDown_Ch1_Threshold.Value;
                             topicName["CH1_AlarmAmpthreshold_Unit"] = "g rms";
                             topicName["CH1_AlarmAmp_Value"] = ch1averagesprectrumMaxValue;
+                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
                             topicName["CH1_AlarmFreq_Value"] = ch1maxfftindex;
                             topicName["CH1_AlarmFreq_Unit"] = "Hz";
                         }
@@ -807,6 +830,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH1_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH1_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH1_AlarmAmp_Value"] = 0;
+                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
                             topicName["CH1_AlarmFreq_Value"] = 0;
                             topicName["CH1_AlarmFreq_Unit"] = "";
                         }
@@ -823,6 +847,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH2_AlarmAmpthreshold_Value"] = numericUpDown_Ch2_Threshold.Value;
                             topicName["CH2_AlarmAmpthreshold_Unit"] = "g rms";
                             topicName["CH2_AlarmAmp_Value"] = ch2averagesprectrumMaxValue;
+                            topicName["CH2_AlarmAmp_Unit"] = "g rms";
                             topicName["CH2_AlarmFreq_Value"] = ch2maxfftindex;
                             topicName["CH2_AlarmFreq_Unit"] = "Hz";
                         }
@@ -832,6 +857,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH2_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH2_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH2_AlarmAmp_Value"] = 0;
+                            topicName["CH2_AlarmAmp_Unit"] = "";
                             topicName["CH2_AlarmFreq_Value"] = 0;
                             topicName["CH2_AlarmFreq_Unit"] = "";
                         }
@@ -848,6 +874,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH3_AlarmAmpthreshold_Value"] = numericUpDown_Ch3_Threshold.Value;
                             topicName["CH3_AlarmAmpthreshold_Unit"] = "g rms";
                             topicName["CH3_AlarmAmp_Value"] = ch3averagesprectrumMaxValue;
+                            topicName["CH3_AlarmAmp_Unit"] = "g rms";
                             topicName["CH3_AlarmFreq_Value"] = ch3maxfftindex;
                             topicName["CH3_AlarmFreq_Unit"] = "Hz";
                         }
@@ -857,6 +884,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                             topicName["CH3_AlarmAmpthreshold_Value"] = 0;
                             topicName["CH3_AlarmAmpthreshold_Unit"] = "";
                             topicName["CH3_AlarmAmp_Value"] = 0;
+                            topicName["CH3_AlarmAmp_Unit"] = "";
                             topicName["CH3_AlarmFreq_Value"] = 0;
                             topicName["CH3_AlarmFreq_Unit"] = "";
                         }
@@ -869,14 +897,80 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ch3fftaveragedata.Add(JArray.FromObject(ch3averagesprectrumValue));
                         fftaveragedata["CH3_Amplitude"] = ch3fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
+                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
                         break;
                 }
+
 
             }
             catch
             {
 
             }
+        }
+        private void IniMqtt()
+        {
+            try
+            {
+                getBrokerIP();
+                mqtt_client = new MqttClient(IPAddress.Parse(broker_ip).ToString());
+                string clientid = Guid.NewGuid().ToString();
+                mqtt_client.Connect(clientid);
+
+            }
+            catch
+            {
+
+                MessageBox.Show("MQTT connect to broker fail!!Please open broker or disable MQTT");
+                //Process.GetCurrentProcess().Kill();
+            }
+        }
+        private void ReadConfiguartion()
+        {
+            JObject json;
+            string MyFilePath;
+            MyFilePath = "C:\\MCMCSOT\\configuration.json";
+            json = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(MyFilePath));
+            textBoxmachinename.Text = json["MachineName"].ToString();
+
+        }
+        private void WriteMqtt(string topic, string data, bool retain)
+        {
+            mqtt_client.Publish(topic, Encoding.UTF8.GetBytes(data), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, retain);
+        }
+        private void getBrokerIP()
+        {
+            string[] sr;
+            bool filecheck = File.Exists("c:\\Setting\\MqttSettings.ini");
+            StreamWriter txtWtr;
+            string sysname;
+            if (!filecheck)
+            {
+                txtWtr = new StreamWriter("c:\\Setting\\MqttSettings.ini", false);
+                sysname = System.Environment.MachineName;
+                txtWtr.WriteLine("BrokerIP : 127.0.0.1");
+                txtWtr.WriteLine("MCMID :" + sysname);
+                txtWtr.Close();
+                sr = File.ReadAllLines(@"c:\Setting\MqttSettings.ini", Encoding.UTF8);
+            }
+            else
+            {
+                sr = File.ReadAllLines(@"c:\Setting\MqttSettings.ini", Encoding.UTF8);
+            }
+
+
+            if (sr[0].Split(':')[0].Trim() == "BrokerIP")
+            {
+
+                broker_ip = sr[0].Split(':')[1].Trim();
+            }
+            if (sr[1].Split(':')[0].Trim() == "MCMID")
+            {
+                sysname = sr[1].Split(':')[1].Trim();
+            }
+
+            //return Config.broker_ip;
+
         }
 
         #endregion=
