@@ -14,6 +14,7 @@ using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using System.Text;
 using System.Net;
+using System.Diagnostics;
 /// <summary>
 /// JYUSB62405多通道连续采集
 /// 作者：简仪科技 
@@ -110,33 +111,44 @@ namespace SeeSharpExample.JY.JYUSB62405
             CreateIfFolderMissing("c:\\MCMCSOT\\FFTALARM");
             filepath = "c:\\MCMCSOT\\FFT\\";
             ReadConfiguartion();
+            
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-
-            if (start)
+            try
             {
-                start = false;
+                if (start)
+                {
+                    start = false;
 
-                if (DataQueue.IsAlive)
-                {
-                    if (false == DataQueue.Join(5000))
+                    if (DataQueue.IsAlive)
                     {
-                        DataQueue.Abort();
+                        if (false == DataQueue.Join(5000))
+                        {
+                            DataQueue.Abort();
+                        }
                     }
-                }
-                if (AI.IsAlive)
-                {
-                    if (false == AI.Join(5000))
+                    if (AI.IsAlive)
                     {
-                        AI.Abort();
+                        if (false == AI.Join(5000))
+                        {
+                            AI.Abort();
+                        }
                     }
+                    aitask.Stop();
+                    aitask.Channels.Clear();//把上次启动添加的通道清掉
                 }
-                aitask.Stop();
-                aitask.Channels.Clear();//把上次启动添加的通道清掉
+                if (mqtt_client.IsConnected)
+                {
+                    mqtt_client.Disconnect();
+                }
             }
+            catch
+            {
 
+            }
+            
         }
 
         /// <summary>
@@ -154,6 +166,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             catch (Exception ex)
             {
                 MessageBox.Show("板卡初始化失败");
+                Process.GetCurrentProcess().Kill();
                 return;
             }
         }
@@ -170,6 +183,8 @@ namespace SeeSharpExample.JY.JYUSB62405
             //添加通道
             groupBox_GenParam.Enabled = false;
             Start.Enabled = false;
+            WriteConfiguration();
+            ReadConfiguartion();
             ConfigDAQ();
             Inital();
             IniMqtt();
@@ -218,11 +233,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            aitask.Stop();
-        }
-
+       
         /// <summary>
         /// 定时器，每秒钟刷新一次
         /// </summary>
@@ -270,6 +281,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             ch1alarmstatus = false;
             ch2alarmstatus = false;
             ch3alarmstatus = false;
+            broker_ip = ipAddressControl1.Text;
         }
         private void ProcessQueue()
         {
@@ -281,7 +293,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                     qoutdata = myqueue.Dequeue();
                     if (qoutdata.averageindex == 1)
                     {
-                        csvfilename = DateTime.Now.ToString("yyy_MM_dd_HH_mm_ss");
+                        csvfilename = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
                     }
                     //显示波形需要做一次转置
 
@@ -398,7 +410,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             Chcount = comboBoxSelectChannel.SelectedIndex + 1;
             for (int i = 0; i < Chcount; i++)
             {
-                aitask.AddChannel(i, (double)numericUpDown_Ch0_Threshold.Value, (double)numericUpDown_averagetimes.Value, Coupling.AC, AITerminal.Differential, true);
+                aitask.AddChannel(i, -10, 10, Coupling.AC, AITerminal.Differential, true);
             }
 
             //基本参数配置
@@ -413,6 +425,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                 if (aitask.AvailableSamples >= (int)aitask.SampleRate)
                 {
                     qindata = new Queuedata();
+                    qindata.logtime = DateTime.Now;
                     aitask.ReadData(ref readValue, (int)aitask.SampleRate, -1);
 
                     if (averagecountindex >= averagetimes)
@@ -421,8 +434,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         averagecountindex = 0;
                     }
                     averagecountindex++;
-                    qindata.averageindex = averagecountindex;
-                    qindata.logtime = DateTime.Now;
+                    qindata.averageindex = averagecountindex;               
                     qindata.RawData = MVAFW.TestItemColls.GenericCopier<double[,]>.DeepCopy(readValue);
                     myqueue.Enqueue(qindata);
                 }
@@ -440,16 +452,16 @@ namespace SeeSharpExample.JY.JYUSB62405
             if (index == 1)
             {
                 File.AppendAllText(filepath + channel + filename + ".csv", "Hz," + string.Join(",", indexf) + "\n");
-                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff") + "," + string.Join(",", FFTData) + "\n");
+                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
             }
             else if (index == averagetimes)
             {
-                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff") + "," + string.Join(",", FFTData) + "\n");
+                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
                 File.AppendAllText(filepath + channel + filename + ".csv", "Average" + "," + string.Join(",", FFTaverage) + "\n");
             }
             else
             {
-                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ffff") + "," + string.Join(",", FFTData) + "\n");
+                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
             }
         }
         private void spectrumcalculation(int channelcount, int index, double[] FFTData)
@@ -777,6 +789,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         fftaveragedata["CH2_Amplitude"] = ch2fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
                         File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                     case 4:
                         topicName["ChannelCnt"] = channelcount;
@@ -898,6 +911,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         fftaveragedata["CH3_Amplitude"] = ch3fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
                         File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                 }
 
@@ -912,7 +926,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         {
             try
             {
-                getBrokerIP();
+                
                 mqtt_client = new MqttClient(IPAddress.Parse(broker_ip).ToString());
                 string clientid = Guid.NewGuid().ToString();
                 mqtt_client.Connect(clientid);
@@ -921,57 +935,66 @@ namespace SeeSharpExample.JY.JYUSB62405
             catch
             {
 
-                MessageBox.Show("MQTT connect to broker fail!!Please open broker or disable MQTT");
-                //Process.GetCurrentProcess().Kill();
+                MessageBox.Show("MQTT connect to broker fail!!Please open broker");
+                
             }
+        }
+        private void WriteConfiguration()
+        {
+            JObject writedjson;
+            string configFilePath;
+            configFilePath = "C:\\MCMCSOT\\configuration.json";
+            writedjson = new JObject();
+            writedjson["MachineName"] = textBoxmachinename.Text;
+            writedjson["CardNumber"] = comboBox_boardNum.SelectedIndex;
+            writedjson["ChannelCount"] = comboBoxSelectChannel.SelectedIndex + 1;
+            writedjson["SamplingRate"] = numericUpDown_SampleRate.Value;
+            writedjson["Ch0Sensivity"] = numericUpDown_CH0_Sensivity.Value;
+            writedjson["Ch1Sensivity"]= numericUpDown_CH1_Sensivity.Value;
+            writedjson["Ch2Sensivity"]= numericUpDown_CH2_Sensivity.Value;
+            writedjson["Ch3Sensivity"]= numericUpDown_CH3_Sensivity.Value;
+            writedjson["Ch0Name"]= textBoxch0name.Text;
+            writedjson["Ch1Name"] = textBoxch1name.Text;
+            writedjson["Ch2Name"]= textBoxch2name.Text;
+            writedjson["Ch3Name"]= textBoxch3name.Text;
+            writedjson["AveragesTimes"]= numericUpDown_averagetimes.Value;
+            writedjson["Ch0Threshold"]= numericUpDown_Ch0_Threshold.Value;
+            writedjson["Ch1Threshold"]= numericUpDown_Ch1_Threshold.Value;
+            writedjson["Ch2Threshold"]= numericUpDown_Ch2_Threshold.Value;
+            writedjson["Ch3Threshold"]= numericUpDown_Ch3_Threshold.Value;
+            writedjson["BrokerIP"]= ipAddressControl1.Text;
+            File.WriteAllText(configFilePath, writedjson.ToString());
         }
         private void ReadConfiguartion()
         {
-            JObject json;
-            string MyFilePath;
-            MyFilePath = "C:\\MCMCSOT\\configuration.json";
-            json = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(MyFilePath));
-            textBoxmachinename.Text = json["MachineName"].ToString();
-
+            JObject readjson;
+            string configFilePath;
+            configFilePath = "C:\\MCMCSOT\\configuration.json";
+            readjson = (JObject)JsonConvert.DeserializeObject(File.ReadAllText(configFilePath));
+            textBoxmachinename.Text = readjson["MachineName"].ToString();
+            comboBox_boardNum.SelectedIndex = Convert.ToInt16(readjson["CardNumber"]);
+            comboBoxSelectChannel.SelectedIndex = Convert.ToInt16(readjson["ChannelCount"]) - 1;
+            numericUpDown_SampleRate.Value = Convert.ToDecimal(readjson["SamplingRate"]);
+            numericUpDown_CH0_Sensivity.Value = Convert.ToDecimal(readjson["Ch0Sensivity"]);
+            numericUpDown_CH1_Sensivity.Value = Convert.ToDecimal(readjson["Ch1Sensivity"]);
+            numericUpDown_CH2_Sensivity.Value = Convert.ToDecimal(readjson["Ch2Sensivity"]);
+            numericUpDown_CH3_Sensivity.Value = Convert.ToDecimal(readjson["Ch3Sensivity"]);
+            textBoxch0name.Text = readjson["Ch0Name"].ToString();
+            textBoxch1name.Text = readjson["Ch1Name"].ToString();
+            textBoxch2name.Text = readjson["Ch2Name"].ToString();
+            textBoxch3name.Text = readjson["Ch3Name"].ToString();
+            numericUpDown_averagetimes.Value = Convert.ToDecimal(readjson["AveragesTimes"]);
+            numericUpDown_Ch0_Threshold.Value = Convert.ToDecimal(readjson["Ch0Threshold"]);
+            numericUpDown_Ch1_Threshold.Value = Convert.ToDecimal(readjson["Ch1Threshold"]);
+            numericUpDown_Ch2_Threshold.Value = Convert.ToDecimal(readjson["Ch2Threshold"]);
+            numericUpDown_Ch3_Threshold.Value = Convert.ToDecimal(readjson["Ch3Threshold"]);
+            ipAddressControl1.Text = readjson["BrokerIP"].ToString();
         }
         private void WriteMqtt(string topic, string data, bool retain)
         {
             mqtt_client.Publish(topic, Encoding.UTF8.GetBytes(data), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, retain);
         }
-        private void getBrokerIP()
-        {
-            string[] sr;
-            bool filecheck = File.Exists("c:\\Setting\\MqttSettings.ini");
-            StreamWriter txtWtr;
-            string sysname;
-            if (!filecheck)
-            {
-                txtWtr = new StreamWriter("c:\\Setting\\MqttSettings.ini", false);
-                sysname = System.Environment.MachineName;
-                txtWtr.WriteLine("BrokerIP : 127.0.0.1");
-                txtWtr.WriteLine("MCMID :" + sysname);
-                txtWtr.Close();
-                sr = File.ReadAllLines(@"c:\Setting\MqttSettings.ini", Encoding.UTF8);
-            }
-            else
-            {
-                sr = File.ReadAllLines(@"c:\Setting\MqttSettings.ini", Encoding.UTF8);
-            }
-
-
-            if (sr[0].Split(':')[0].Trim() == "BrokerIP")
-            {
-
-                broker_ip = sr[0].Split(':')[1].Trim();
-            }
-            if (sr[1].Split(':')[0].Trim() == "MCMID")
-            {
-                sysname = sr[1].Split(':')[1].Trim();
-            }
-
-            //return Config.broker_ip;
-
-        }
+       
 
         #endregion=
 

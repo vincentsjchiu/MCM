@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries1 = new SeeSharpTools.JY.GUI.EasyChartSeries();
-            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries2 = new SeeSharpTools.JY.GUI.EasyChartSeries();
+            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries5 = new SeeSharpTools.JY.GUI.EasyChartSeries();
+            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries6 = new SeeSharpTools.JY.GUI.EasyChartSeries();
             this.easyChartTime = new SeeSharpTools.JY.GUI.EasyChart();
             this.label_SampleRate = new System.Windows.Forms.Label();
             this.label_Channel = new System.Windows.Forms.Label();
@@ -121,10 +121,10 @@
             this.easyChartTime.GradientStyle = SeeSharpTools.JY.GUI.EasyChart.EasyChartGradientStyle.None;
             this.easyChartTime.LegendBackColor = System.Drawing.Color.Transparent;
             this.easyChartTime.LegendVisible = true;
-            easyChartSeries1.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
-            easyChartSeries1.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
-            easyChartSeries1.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
-            this.easyChartTime.LineSeries.Add(easyChartSeries1);
+            easyChartSeries5.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
+            easyChartSeries5.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
+            easyChartSeries5.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
+            this.easyChartTime.LineSeries.Add(easyChartSeries5);
             this.easyChartTime.Location = new System.Drawing.Point(63, 69);
             this.easyChartTime.MajorGridColor = System.Drawing.Color.Black;
             this.easyChartTime.MajorGridEnabled = true;
@@ -262,7 +262,7 @@
             // 
             // numericUpDown_Ch0_Threshold
             // 
-            this.numericUpDown_Ch0_Threshold.DecimalPlaces = 1;
+            this.numericUpDown_Ch0_Threshold.DecimalPlaces = 2;
             this.numericUpDown_Ch0_Threshold.Increment = new decimal(new int[] {
             1,
             0,
@@ -291,10 +291,9 @@
             // 
             // numericUpDown_averagetimes
             // 
-            this.numericUpDown_averagetimes.DecimalPlaces = 1;
             this.numericUpDown_averagetimes.Location = new System.Drawing.Point(809, 317);
             this.numericUpDown_averagetimes.Maximum = new decimal(new int[] {
-            10,
+            1000,
             0,
             0,
             0});
@@ -472,7 +471,7 @@
             // 
             // numericUpDown_CH3_Sensivity
             // 
-            this.numericUpDown_CH3_Sensivity.DecimalPlaces = 1;
+            this.numericUpDown_CH3_Sensivity.DecimalPlaces = 2;
             this.numericUpDown_CH3_Sensivity.Increment = new decimal(new int[] {
             1,
             0,
@@ -496,7 +495,7 @@
             // 
             // numericUpDown_CH2_Sensivity
             // 
-            this.numericUpDown_CH2_Sensivity.DecimalPlaces = 1;
+            this.numericUpDown_CH2_Sensivity.DecimalPlaces = 2;
             this.numericUpDown_CH2_Sensivity.Increment = new decimal(new int[] {
             1,
             0,
@@ -520,7 +519,7 @@
             // 
             // numericUpDown_CH1_Sensivity
             // 
-            this.numericUpDown_CH1_Sensivity.DecimalPlaces = 1;
+            this.numericUpDown_CH1_Sensivity.DecimalPlaces = 2;
             this.numericUpDown_CH1_Sensivity.Increment = new decimal(new int[] {
             1,
             0,
@@ -544,7 +543,7 @@
             // 
             // numericUpDown_CH0_Sensivity
             // 
-            this.numericUpDown_CH0_Sensivity.DecimalPlaces = 1;
+            this.numericUpDown_CH0_Sensivity.DecimalPlaces = 2;
             this.numericUpDown_CH0_Sensivity.Increment = new decimal(new int[] {
             1,
             0,
@@ -652,10 +651,10 @@
             this.easyChartFFT.GradientStyle = SeeSharpTools.JY.GUI.EasyChart.EasyChartGradientStyle.None;
             this.easyChartFFT.LegendBackColor = System.Drawing.Color.Transparent;
             this.easyChartFFT.LegendVisible = true;
-            easyChartSeries2.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
-            easyChartSeries2.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
-            easyChartSeries2.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
-            this.easyChartFFT.LineSeries.Add(easyChartSeries2);
+            easyChartSeries6.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
+            easyChartSeries6.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
+            easyChartSeries6.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
+            this.easyChartFFT.LineSeries.Add(easyChartSeries6);
             this.easyChartFFT.Location = new System.Drawing.Point(63, 315);
             this.easyChartFFT.MajorGridColor = System.Drawing.Color.Black;
             this.easyChartFFT.MajorGridEnabled = true;
@@ -785,7 +784,7 @@
             // 
             // numericUpDown_Ch1_Threshold
             // 
-            this.numericUpDown_Ch1_Threshold.DecimalPlaces = 1;
+            this.numericUpDown_Ch1_Threshold.DecimalPlaces = 2;
             this.numericUpDown_Ch1_Threshold.Increment = new decimal(new int[] {
             1,
             0,
@@ -814,7 +813,7 @@
             // 
             // numericUpDown_Ch2_Threshold
             // 
-            this.numericUpDown_Ch2_Threshold.DecimalPlaces = 1;
+            this.numericUpDown_Ch2_Threshold.DecimalPlaces = 2;
             this.numericUpDown_Ch2_Threshold.Increment = new decimal(new int[] {
             1,
             0,
@@ -843,7 +842,7 @@
             // 
             // numericUpDown_Ch3_Threshold
             // 
-            this.numericUpDown_Ch3_Threshold.DecimalPlaces = 1;
+            this.numericUpDown_Ch3_Threshold.DecimalPlaces = 2;
             this.numericUpDown_Ch3_Threshold.Increment = new decimal(new int[] {
             1,
             0,
@@ -972,8 +971,7 @@
             this.MaximumSize = new System.Drawing.Size(2000, 602);
             this.MinimumSize = new System.Drawing.Size(638, 382);
             this.Name = "MainForm";
-            this.Text = "MCM-100多通道连续采集";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Text = "MCM-100多通道连续采集";          
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_SampleRate)).EndInit();
