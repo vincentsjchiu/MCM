@@ -59,6 +59,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         int ch0minfftindex, ch1minfftindex, ch2minfftindex, ch3minfftindex;
         bool ch0alarmstatus, ch1alarmstatus, ch2alarmstatus, ch3alarmstatus;
         string filepath;
+        string foldertime;
         string csvfilename;
         string ch0name, ch1name, ch2name, ch3name;
         string machinename;
@@ -70,6 +71,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         JArray ch1fftaveragedata = new JArray();
         JArray ch2fftaveragedata = new JArray();
         JArray ch3fftaveragedata = new JArray();
+        DateTime lasttime;
         /// <summary>
         /// 存放readValue转置后的数据，容量与readValue一样
         /// </summary>
@@ -282,6 +284,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             ch2alarmstatus = false;
             ch3alarmstatus = false;
             broker_ip = ipAddressControl1.Text;
+            lasttime = new DateTime();
         }
         private void ProcessQueue()
         {
@@ -291,10 +294,15 @@ namespace SeeSharpExample.JY.JYUSB62405
                 if (myqueue.Count > 0)
                 {
                     qoutdata = myqueue.Dequeue();
+                    if (lasttime.ToString("yyy_MM_dd_HH_mm_ss") == qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss"))
+                    {
+                        qoutdata.logtime = qoutdata.logtime.AddSeconds(1);
+                    }
                     if (qoutdata.averageindex == 1)
                     {
                         csvfilename = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
                     }
+                    lasttime = qoutdata.logtime;
                     //显示波形需要做一次转置
 
                     if (Chcount == 1)
@@ -304,9 +312,12 @@ namespace SeeSharpExample.JY.JYUSB62405
                         Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         spectrumcalculation(1, qoutdata.averageindex, ch0sprectrumValue);
                         CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
+                        
                         if (qoutdata.averageindex == averagetimes)
                         {
                             WriteChannelData(1);
+                            copyalarmfile(filepath, qoutdata.logtime);
+                            Deleteoldfile(filepath);
                         }
 
                     }
@@ -321,10 +332,12 @@ namespace SeeSharpExample.JY.JYUSB62405
                         spectrumcalculation(1, qoutdata.averageindex, ch0sprectrumValue);
                         spectrumcalculation(2, qoutdata.averageindex, ch1sprectrumValue);
                         CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
-                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);
+                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);                       
                         if (qoutdata.averageindex == averagetimes)
                         {
                             WriteChannelData(2);
+                            copyalarmfile(filepath, qoutdata.logtime);
+                            Deleteoldfile(filepath);
                         }
                     }
                     else if (Chcount == 3)
@@ -344,9 +357,12 @@ namespace SeeSharpExample.JY.JYUSB62405
                         CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
                         CsvData(filepath, "CH1_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);
                         CsvData(filepath, "CH2_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue, ch2averagesprectrumValue);
+                        
                         if (qoutdata.averageindex == averagetimes)
                         {
                             WriteChannelData(3);
+                            copyalarmfile(filepath, qoutdata.logtime);
+                            Deleteoldfile(filepath);
                         }
                     }
                     else
@@ -371,9 +387,12 @@ namespace SeeSharpExample.JY.JYUSB62405
                         CsvData(filepath, "CH1_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);
                         CsvData(filepath, "CH2_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue, ch2averagesprectrumValue);
                         CsvData(filepath, "CH3_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch3sprectrumValue, ch3averagesprectrumValue);
+                       
                         if (qoutdata.averageindex == averagetimes)
                         {
                             WriteChannelData(4);
+                            copyalarmfile(filepath, qoutdata.logtime);
+                            //Deleteoldfile(filepath);
                         }
                     }
 
@@ -447,21 +466,109 @@ namespace SeeSharpExample.JY.JYUSB62405
             if (!folderExists)
                 Directory.CreateDirectory(path);
         }
-        private void CsvData(string filepath, string channel, string filename, int index, DateTime time, double[] indexf, double[] FFTData, double[] FFTaverage)
-        {
+        private void CsvData(string path, string channel, string filename, int index, DateTime time, double[] indexf, double[] FFTData, double[] FFTaverage)
+        {         
+            foldertime = DateTime.Now.ToString("yyyy-MM-dd");
+            path = path + foldertime;
+            path = path + "\\";           
             if (index == 1)
             {
-                File.AppendAllText(filepath + channel + filename + ".csv", "Hz," + string.Join(",", indexf) + "\n");
-                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
+                File.AppendAllText(path + channel + filename + ".csv", "Hz," + string.Join(",", indexf) + "\n");
+                File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
+                
             }
             else if (index == averagetimes)
             {
-                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
-                File.AppendAllText(filepath + channel + filename + ".csv", "Average" + "," + string.Join(",", FFTaverage) + "\n");
+                File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
+                File.AppendAllText(path + channel + filename + ".csv", "Average" + "," + string.Join(",", FFTaverage) + "\n");
+                File.Move(path + channel + filename + ".csv", path + channel + time.ToString("yyy_MM_dd_HH_mm_ss") + ".csv");
+                
             }
             else
             {
-                File.AppendAllText(filepath + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
+                File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss") + "," + string.Join(",", FFTData) + "\n");
+            }
+            
+        }
+        private void copyalarmfile(string path,DateTime time)
+        {
+            try
+            {
+                FileInfo[] Alarmfiles;
+                DirectoryInfo diralarm;
+                CreateIfFolderMissing("C:\\MCMCSOT\\FFTALARM\\" + foldertime);
+                string destinationDirectory = "C:\\MCMCSOT\\FFTALARM\\" + foldertime + "\\";
+                path = path + foldertime;
+                path = path + "\\";
+                string sourceDirectory = path;
+                string alramdatetime = time.ToString("yyy_MM_dd_HH_mm_ss");
+                diralarm = new DirectoryInfo(sourceDirectory);
+                if (ch0alarmstatus)
+                {
+                    Alarmfiles = diralarm.GetFiles("CH0" + "_" +alramdatetime  + "*", SearchOption.AllDirectories);
+                    for (int i = 0; i < Alarmfiles.GetLength(0); i++)
+                    {
+                        File.Copy(sourceDirectory + Path.GetFileName(Alarmfiles[i].ToString()), destinationDirectory + Path.GetFileName(Alarmfiles[i].ToString()));
+                    }
+                }
+                if (ch1alarmstatus)
+                {
+                    Alarmfiles = diralarm.GetFiles("CH1" + "_" + alramdatetime + "*", SearchOption.AllDirectories);
+                    for (int i = 0; i < Alarmfiles.GetLength(0); i++)
+                    {
+                        File.Copy(sourceDirectory + Path.GetFileName(Alarmfiles[i].ToString()), destinationDirectory + Path.GetFileName(Alarmfiles[i].ToString()));
+                    }
+                }
+                if (ch2alarmstatus)
+                {
+                    Alarmfiles = diralarm.GetFiles("CH2" + "_" + alramdatetime + "*", SearchOption.AllDirectories);
+                    for (int i = 0; i < Alarmfiles.GetLength(0); i++)
+                    {
+                        File.Copy(sourceDirectory + Path.GetFileName(Alarmfiles[i].ToString()), destinationDirectory + Path.GetFileName(Alarmfiles[i].ToString()));
+                    }
+                }
+                if (ch3alarmstatus)
+                {
+                    Alarmfiles = diralarm.GetFiles("CH3" + "_" + alramdatetime + "*", SearchOption.AllDirectories);
+                    for (int i = 0; i < Alarmfiles.GetLength(0); i++)
+                    {
+                        File.Copy(sourceDirectory + Path.GetFileName(Alarmfiles[i].ToString()), destinationDirectory + Path.GetFileName(Alarmfiles[i].ToString()));
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        private void Deleteoldfile(string path)
+        {
+            try
+            {
+                DirectoryInfo dir;
+                dir = new DirectoryInfo(path);
+                string Oldfolder = dir.GetDirectories().OrderBy(p => p.CreationTime).FirstOrDefault().ToString();
+                dir = new DirectoryInfo(path + "\\" + Oldfolder);
+                if (dir.GetFiles().Length == 0)
+                {
+                    Directory.Delete(path + "\\" + Oldfolder);
+                }
+                else
+                {
+                    string Oldfiles = dir.GetFiles().OrderBy(p => p.CreationTime).FirstOrDefault().ToString();
+                    Oldfiles = Oldfiles.Substring(0, Oldfiles.IndexOf("CH"));
+                    FileInfo[] Deletefiles;
+                    Deletefiles = dir.GetFiles(Oldfiles + "*", SearchOption.AllDirectories);
+
+                    for (int i = 0; i < Chcount; i++)
+                    {
+                        File.Delete(path + "\\" + Oldfolder + "\\" + Deletefiles[i].ToString());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
             }
         }
         private void spectrumcalculation(int channelcount, int index, double[] FFTData)
