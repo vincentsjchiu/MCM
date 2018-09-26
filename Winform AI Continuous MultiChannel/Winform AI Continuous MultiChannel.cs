@@ -113,7 +113,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             CreateIfFolderMissing("c:\\MCMCSOT\\FFTALARM");
             filepath = "c:\\MCMCSOT\\FFT\\";
             ReadConfiguartion();
-            
+            Stop.Enabled = false;
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -185,6 +185,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             //添加通道
             groupBox_GenParam.Enabled = false;
             Start.Enabled = false;
+            Stop.Enabled = true;
             WriteConfiguration();
             ReadConfiguartion();
             ConfigDAQ();
@@ -383,15 +384,15 @@ namespace SeeSharpExample.JY.JYUSB62405
                         spectrumcalculation(2, qoutdata.averageindex, ch1sprectrumValue);
                         spectrumcalculation(3, qoutdata.averageindex, ch2sprectrumValue);
                         spectrumcalculation(4, qoutdata.averageindex, ch3sprectrumValue);
-                        CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
-                        CsvData(filepath, "CH1_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);
-                        CsvData(filepath, "CH2_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue, ch2averagesprectrumValue);
-                        CsvData(filepath, "CH3_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch3sprectrumValue, ch3averagesprectrumValue);
+                        //CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
+                        //CsvData(filepath, "CH1_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);
+                        //CsvData(filepath, "CH2_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue, ch2averagesprectrumValue);
+                        //CsvData(filepath, "CH3_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch3sprectrumValue, ch3averagesprectrumValue);
                        
                         if (qoutdata.averageindex == averagetimes)
                         {
                             WriteChannelData(4);
-                            copyalarmfile(filepath, qoutdata.logtime);
+                            //copyalarmfile(filepath, qoutdata.logtime);
                             //Deleteoldfile(filepath);
                         }
                     }
