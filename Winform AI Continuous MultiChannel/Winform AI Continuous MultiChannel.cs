@@ -48,7 +48,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         double[] FFTdf;
         double ch0averagesprectrumMaxValue, ch1averagesprectrumMaxValue, ch2averagesprectrumMaxValue, ch3averagesprectrumMaxValue;
         double ch0averagesprectrumMinValue, ch1averagesprectrumMinValue, ch2averagesprectrumMinValue, ch3averagesprectrumMinValue;
-        Thread AI, DataQueue;
+        Thread AI, DataQueue, Delete;
         Queue<Queuedata> myqueue = new Queue<Queuedata>();
         Queuedata qindata = new Queuedata();
         Queuedata qoutdata = new Queuedata();
@@ -72,6 +72,8 @@ namespace SeeSharpExample.JY.JYUSB62405
         JArray ch2fftaveragedata = new JArray();
         JArray ch3fftaveragedata = new JArray();
         DateTime lasttime;
+        DriveInfo space;
+        long gb = 1000000000;
         /// <summary>
         /// 存放readValue转置后的数据，容量与readValue一样
         /// </summary>
@@ -137,9 +139,16 @@ namespace SeeSharpExample.JY.JYUSB62405
                         {
                             AI.Abort();
                         }
-                    }
+                    }                   
                     aitask.Stop();
                     aitask.Channels.Clear();//把上次启动添加的通道清掉
+                    if (Delete.IsAlive)
+                    {
+                        if (false == Delete.Join(5000))
+                        {
+                            Delete.Abort();
+                        }
+                    }
                 }
                 if (mqtt_client.IsConnected)
                 {
@@ -150,7 +159,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             {
 
             }
-            
+
         }
 
         /// <summary>
@@ -197,6 +206,8 @@ namespace SeeSharpExample.JY.JYUSB62405
             AI.Start();
             DataQueue = new Thread(ProcessQueue);
             DataQueue.Start();
+            Delete = new Thread(DeleteProcess);
+            Delete.Start();
             //启用定时器，禁用参数配置按钮
 
         }
@@ -222,10 +233,16 @@ namespace SeeSharpExample.JY.JYUSB62405
                 {
                     AI.Abort();
                 }
-            }
+            }           
             aitask.Stop();
-            aitask.Channels.Clear();//把上次启动添加的通道清掉
-            //禁用定时器，重新启动参数配置按钮
+            aitask.Channels.Clear();//把上次启动添加的通道清掉                                   //禁用定时器，重新启动参数配置按钮
+            if (Delete.IsAlive)
+            {
+                if (false == Delete.Join(5000))
+                {
+                    Delete.Abort();
+                }
+            }
             groupBox_GenParam.Enabled = true;
             Start.Enabled = true;
 
@@ -236,7 +253,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-       
+
         /// <summary>
         /// 定时器，每秒钟刷新一次
         /// </summary>
@@ -286,6 +303,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             ch3alarmstatus = false;
             broker_ip = ipAddressControl1.Text;
             lasttime = new DateTime();
+            space = new DriveInfo("c");
         }
         private void ProcessQueue()
         {
@@ -313,12 +331,14 @@ namespace SeeSharpExample.JY.JYUSB62405
                         Spectrum.PowerSpectrum(ch0RawValue, aitask.SampleRate, ref ch0sprectrumValue, out df, SpectrumUnits.V, WindowType.Hanning);
                         spectrumcalculation(1, qoutdata.averageindex, ch0sprectrumValue);
                         CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
-                        
+
                         if (qoutdata.averageindex == averagetimes)
                         {
+                            if(mqtt_client.IsConnected)
+                            {
                             WriteChannelData(1);
-                            copyalarmfile(filepath, qoutdata.logtime);
-                            Deleteoldfile(filepath);
+                            }
+                            copyalarmfile(filepath, qoutdata.logtime);                   
                         }
 
                     }
@@ -333,12 +353,15 @@ namespace SeeSharpExample.JY.JYUSB62405
                         spectrumcalculation(1, qoutdata.averageindex, ch0sprectrumValue);
                         spectrumcalculation(2, qoutdata.averageindex, ch1sprectrumValue);
                         CsvData(filepath, "CH0", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
-                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);                       
+                        CsvData(filepath, "CH1", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);
                         if (qoutdata.averageindex == averagetimes)
                         {
-                            WriteChannelData(2);
+                            if (mqtt_client.IsConnected)
+                            {
+                                WriteChannelData(2);
+                            }
                             copyalarmfile(filepath, qoutdata.logtime);
-                            Deleteoldfile(filepath);
+                            
                         }
                     }
                     else if (Chcount == 3)
@@ -358,12 +381,15 @@ namespace SeeSharpExample.JY.JYUSB62405
                         CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
                         CsvData(filepath, "CH1_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);
                         CsvData(filepath, "CH2_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue, ch2averagesprectrumValue);
-                        
+
                         if (qoutdata.averageindex == averagetimes)
                         {
-                            WriteChannelData(3);
+                            if (mqtt_client.IsConnected)
+                            {
+                                WriteChannelData(3);
+                            }
                             copyalarmfile(filepath, qoutdata.logtime);
-                            Deleteoldfile(filepath);
+                            
                         }
                     }
                     else
@@ -384,16 +410,19 @@ namespace SeeSharpExample.JY.JYUSB62405
                         spectrumcalculation(2, qoutdata.averageindex, ch1sprectrumValue);
                         spectrumcalculation(3, qoutdata.averageindex, ch2sprectrumValue);
                         spectrumcalculation(4, qoutdata.averageindex, ch3sprectrumValue);
-                        //CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
-                        //CsvData(filepath, "CH1_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);
-                        //CsvData(filepath, "CH2_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue, ch2averagesprectrumValue);
-                        //CsvData(filepath, "CH3_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch3sprectrumValue, ch3averagesprectrumValue);
-                       
+                        CsvData(filepath, "CH0_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch0sprectrumValue, ch0averagesprectrumValue);
+                        CsvData(filepath, "CH1_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch1sprectrumValue, ch1averagesprectrumValue);
+                        CsvData(filepath, "CH2_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch2sprectrumValue, ch2averagesprectrumValue);
+                        CsvData(filepath, "CH3_", csvfilename, qoutdata.averageindex, qoutdata.logtime, FFTdf, ch3sprectrumValue, ch3averagesprectrumValue);
+
                         if (qoutdata.averageindex == averagetimes)
                         {
-                            WriteChannelData(4);
-                            //copyalarmfile(filepath, qoutdata.logtime);
-                            //Deleteoldfile(filepath);
+                            if (mqtt_client.IsConnected)
+                            {
+                                WriteChannelData(4);
+                            }
+                            copyalarmfile(filepath, qoutdata.logtime);
+                            
                         }
                     }
 
@@ -454,7 +483,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         averagecountindex = 0;
                     }
                     averagecountindex++;
-                    qindata.averageindex = averagecountindex;               
+                    qindata.averageindex = averagecountindex;
                     qindata.RawData = MVAFW.TestItemColls.GenericCopier<double[,]>.DeepCopy(readValue);
                     myqueue.Enqueue(qindata);
                 }
@@ -468,30 +497,51 @@ namespace SeeSharpExample.JY.JYUSB62405
                 Directory.CreateDirectory(path);
         }
         private void CsvData(string path, string channel, string filename, int index, DateTime time, double[] indexf, double[] FFTData, double[] FFTaverage)
-        {         
-            foldertime = DateTime.Now.ToString("yyyy-MM-dd");
-            path = path + foldertime;
-            path = path + "\\";           
-            if (index == 1)
+        {
+            try
             {
-                File.AppendAllText(path + channel + filename + ".csv", "Hz," + string.Join(",", indexf) + "\n");
-                File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
-                
+                foldertime = DateTime.Now.ToString("yyyy-MM-dd");
+                path = path + foldertime;
+                CreateIfFolderMissing(path);
+                path = path + "\\";
+                if (index == 1)
+                {
+                    File.AppendAllText(path + channel + filename + ".csv", "Hz," + string.Join(",", indexf) + "\n");
+                    File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
+
+                }
+                else if (index == averagetimes)
+                {
+                    File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
+                    File.AppendAllText(path + channel + filename + ".csv", "Average" + "," + string.Join(",", FFTaverage) + "\n");
+                    File.Move(path + channel + filename + ".csv", path + channel + time.ToString("yyy_MM_dd_HH_mm_ss") + ".csv");
+
+                }
+                else
+                {
+                    File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss") + "," + string.Join(",", FFTData) + "\n");
+                }
             }
-            else if (index == averagetimes)
+            catch
             {
-                File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
-                File.AppendAllText(path + channel + filename + ".csv", "Average" + "," + string.Join(",", FFTaverage) + "\n");
-                File.Move(path + channel + filename + ".csv", path + channel + time.ToString("yyy_MM_dd_HH_mm_ss") + ".csv");
-                
+
             }
-            else
-            {
-                File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss") + "," + string.Join(",", FFTData) + "\n");
-            }
-            
+
         }
-        private void copyalarmfile(string path,DateTime time)
+        private void DeleteProcess()
+        {
+            while (start)
+            {
+                Thread.Sleep(1000);
+                if(space.AvailableFreeSpace< 5 * gb)
+                {
+                    Deleteoldfile("C:\\MCMCSOT\\FFT");
+                    Deleteoldfile("C:\\MCMCSOT\\FFTALARM\\");
+                }
+
+            }
+        }
+        private void copyalarmfile(string path, DateTime time)
         {
             try
             {
@@ -506,7 +556,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                 diralarm = new DirectoryInfo(sourceDirectory);
                 if (ch0alarmstatus)
                 {
-                    Alarmfiles = diralarm.GetFiles("CH0" + "_" +alramdatetime  + "*", SearchOption.AllDirectories);
+                    Alarmfiles = diralarm.GetFiles("CH0" + "_" + alramdatetime + "*", SearchOption.AllDirectories);
                     for (int i = 0; i < Alarmfiles.GetLength(0); i++)
                     {
                         File.Copy(sourceDirectory + Path.GetFileName(Alarmfiles[i].ToString()), destinationDirectory + Path.GetFileName(Alarmfiles[i].ToString()));
@@ -743,7 +793,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ch0fftaveragedata.Add(JArray.FromObject(ch0averagesprectrumValue));
                         fftaveragedata["CH0_Amplitude"] = ch0fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
-                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        //File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
                         WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                     case 2:
@@ -896,7 +946,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ch2fftaveragedata.Add(JArray.FromObject(ch2averagesprectrumValue));
                         fftaveragedata["CH2_Amplitude"] = ch2fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
-                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        //File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
                         WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                     case 4:
@@ -1018,7 +1068,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ch3fftaveragedata.Add(JArray.FromObject(ch3averagesprectrumValue));
                         fftaveragedata["CH3_Amplitude"] = ch3fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
-                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        //File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
                         WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                 }
@@ -1034,7 +1084,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         {
             try
             {
-                
+
                 mqtt_client = new MqttClient(IPAddress.Parse(broker_ip).ToString());
                 string clientid = Guid.NewGuid().ToString();
                 mqtt_client.Connect(clientid);
@@ -1044,7 +1094,7 @@ namespace SeeSharpExample.JY.JYUSB62405
             {
 
                 MessageBox.Show("MQTT connect to broker fail!!Please open broker");
-                
+
             }
         }
         private void WriteConfiguration()
@@ -1058,19 +1108,19 @@ namespace SeeSharpExample.JY.JYUSB62405
             writedjson["ChannelCount"] = comboBoxSelectChannel.SelectedIndex + 1;
             writedjson["SamplingRate"] = numericUpDown_SampleRate.Value;
             writedjson["Ch0Sensivity"] = numericUpDown_CH0_Sensivity.Value;
-            writedjson["Ch1Sensivity"]= numericUpDown_CH1_Sensivity.Value;
-            writedjson["Ch2Sensivity"]= numericUpDown_CH2_Sensivity.Value;
-            writedjson["Ch3Sensivity"]= numericUpDown_CH3_Sensivity.Value;
-            writedjson["Ch0Name"]= textBoxch0name.Text;
+            writedjson["Ch1Sensivity"] = numericUpDown_CH1_Sensivity.Value;
+            writedjson["Ch2Sensivity"] = numericUpDown_CH2_Sensivity.Value;
+            writedjson["Ch3Sensivity"] = numericUpDown_CH3_Sensivity.Value;
+            writedjson["Ch0Name"] = textBoxch0name.Text;
             writedjson["Ch1Name"] = textBoxch1name.Text;
-            writedjson["Ch2Name"]= textBoxch2name.Text;
-            writedjson["Ch3Name"]= textBoxch3name.Text;
-            writedjson["AveragesTimes"]= numericUpDown_averagetimes.Value;
-            writedjson["Ch0Threshold"]= numericUpDown_Ch0_Threshold.Value;
-            writedjson["Ch1Threshold"]= numericUpDown_Ch1_Threshold.Value;
-            writedjson["Ch2Threshold"]= numericUpDown_Ch2_Threshold.Value;
-            writedjson["Ch3Threshold"]= numericUpDown_Ch3_Threshold.Value;
-            writedjson["BrokerIP"]= ipAddressControl1.Text;
+            writedjson["Ch2Name"] = textBoxch2name.Text;
+            writedjson["Ch3Name"] = textBoxch3name.Text;
+            writedjson["AveragesTimes"] = numericUpDown_averagetimes.Value;
+            writedjson["Ch0Threshold"] = numericUpDown_Ch0_Threshold.Value;
+            writedjson["Ch1Threshold"] = numericUpDown_Ch1_Threshold.Value;
+            writedjson["Ch2Threshold"] = numericUpDown_Ch2_Threshold.Value;
+            writedjson["Ch3Threshold"] = numericUpDown_Ch3_Threshold.Value;
+            writedjson["BrokerIP"] = ipAddressControl1.Text;
             File.WriteAllText(configFilePath, writedjson.ToString());
         }
         private void ReadConfiguartion()
@@ -1102,7 +1152,7 @@ namespace SeeSharpExample.JY.JYUSB62405
         {
             mqtt_client.Publish(topic, Encoding.UTF8.GetBytes(data), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, retain);
         }
-       
+
 
         #endregion=
 

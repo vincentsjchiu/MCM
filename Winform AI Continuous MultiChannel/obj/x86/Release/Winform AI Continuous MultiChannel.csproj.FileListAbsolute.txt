@@ -17,3 +17,9 @@ D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Release\SeeSharpE
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Release\Winform AI Continuous MultiChannel.csproj.GenerateResource.Cache
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Release\f_AICont.exe
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Release\f_AICont.pdb
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Release\M2Mqtt.Net.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Release\Newtonsoft.Json.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Release\SeeSharpTools.JY.File.dll
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Release\M2Mqtt.Net.pdb
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Release\SeeSharpTools.JY.File.xml
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Release\Winform AI Continuous MultiChannel.csprojResolveAssemblyReference.cache

@@ -22,3 +22,4 @@ D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\SeeSharpToo
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\Newtonsoft.Json.dll
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\M2Mqtt.Net.dll
 D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\bin\x86\Debug\M2Mqtt.Net.pdb
+D:\MCM POC\CSOT MCM\Winform AI Continuous MultiChannel\obj\x86\Debug\Winform AI Continuous MultiChannel.csprojResolveAssemblyReference.cache
