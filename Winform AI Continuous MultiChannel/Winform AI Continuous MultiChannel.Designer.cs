@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries3 = new SeeSharpTools.JY.GUI.EasyChartSeries();
-            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries4 = new SeeSharpTools.JY.GUI.EasyChartSeries();
+            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries1 = new SeeSharpTools.JY.GUI.EasyChartSeries();
+            SeeSharpTools.JY.GUI.EasyChartSeries easyChartSeries2 = new SeeSharpTools.JY.GUI.EasyChartSeries();
             this.easyChartTime = new SeeSharpTools.JY.GUI.EasyChart();
             this.label_SampleRate = new System.Windows.Forms.Label();
             this.label_Channel = new System.Windows.Forms.Label();
@@ -121,10 +121,10 @@
             this.easyChartTime.GradientStyle = SeeSharpTools.JY.GUI.EasyChart.EasyChartGradientStyle.None;
             this.easyChartTime.LegendBackColor = System.Drawing.Color.Transparent;
             this.easyChartTime.LegendVisible = true;
-            easyChartSeries3.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
-            easyChartSeries3.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
-            easyChartSeries3.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
-            this.easyChartTime.LineSeries.Add(easyChartSeries3);
+            easyChartSeries1.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
+            easyChartSeries1.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
+            easyChartSeries1.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
+            this.easyChartTime.LineSeries.Add(easyChartSeries1);
             this.easyChartTime.Location = new System.Drawing.Point(63, 69);
             this.easyChartTime.MajorGridColor = System.Drawing.Color.Black;
             this.easyChartTime.MajorGridEnabled = true;
@@ -223,9 +223,9 @@
             this.label_RangeLow.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label_RangeLow.Location = new System.Drawing.Point(682, 351);
             this.label_RangeLow.Name = "label_RangeLow";
-            this.label_RangeLow.Size = new System.Drawing.Size(84, 14);
+            this.label_RangeLow.Size = new System.Drawing.Size(133, 14);
             this.label_RangeLow.TabIndex = 3;
-            this.label_RangeLow.Text = "CH0報警閥值";
+            this.label_RangeLow.Text = "CH0報警閥值(g rms)";
             // 
             // label_RangeHigh
             // 
@@ -246,7 +246,7 @@
             0,
             0});
             this.numericUpDown_SampleRate.Minimum = new decimal(new int[] {
-            3,
+            1000,
             0,
             0,
             0});
@@ -268,7 +268,7 @@
             0,
             0,
             131072});
-            this.numericUpDown_Ch0_Threshold.Location = new System.Drawing.Point(809, 348);
+            this.numericUpDown_Ch0_Threshold.Location = new System.Drawing.Point(815, 348);
             this.numericUpDown_Ch0_Threshold.Maximum = new decimal(new int[] {
             10,
             0,
@@ -291,7 +291,7 @@
             // 
             // numericUpDown_averagetimes
             // 
-            this.numericUpDown_averagetimes.Location = new System.Drawing.Point(809, 317);
+            this.numericUpDown_averagetimes.Location = new System.Drawing.Point(815, 317);
             this.numericUpDown_averagetimes.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -394,9 +394,9 @@
             this.groupBox_GenParam.Controls.Add(this.label_SampleRate);
             this.groupBox_GenParam.Controls.Add(this.label_Channel);
             this.groupBox_GenParam.Controls.Add(this.numericUpDown_SampleRate);
-            this.groupBox_GenParam.Location = new System.Drawing.Point(685, 55);
+            this.groupBox_GenParam.Location = new System.Drawing.Point(676, 55);
             this.groupBox_GenParam.Name = "groupBox_GenParam";
-            this.groupBox_GenParam.Size = new System.Drawing.Size(437, 225);
+            this.groupBox_GenParam.Size = new System.Drawing.Size(446, 225);
             this.groupBox_GenParam.TabIndex = 65;
             this.groupBox_GenParam.TabStop = false;
             this.groupBox_GenParam.Text = "基本参数配置";
@@ -589,41 +589,41 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label10.Location = new System.Drawing.Point(6, 201);
+            this.label10.Location = new System.Drawing.Point(0, 201);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(140, 14);
+            this.label10.Size = new System.Drawing.Size(154, 14);
             this.label10.TabIndex = 69;
-            this.label10.Text = "CH3 Sensivity(mv/g)";
+            this.label10.Text = "CH3 Sensitivity(mv/g)";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label9.Location = new System.Drawing.Point(6, 173);
+            this.label9.Location = new System.Drawing.Point(0, 173);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(140, 14);
+            this.label9.Size = new System.Drawing.Size(154, 14);
             this.label9.TabIndex = 68;
-            this.label9.Text = "CH2 Sensivity(mv/g)";
+            this.label9.Text = "CH2 Sensitivity(mv/g)";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label8.Location = new System.Drawing.Point(6, 145);
+            this.label8.Location = new System.Drawing.Point(0, 145);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(140, 14);
+            this.label8.Size = new System.Drawing.Size(154, 14);
             this.label8.TabIndex = 67;
-            this.label8.Text = "CH1 Sensivity(mv/g)";
+            this.label8.Text = "CH1 Sensitivity(mv/g)";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(6, 116);
+            this.label6.Location = new System.Drawing.Point(0, 116);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(140, 14);
+            this.label6.Size = new System.Drawing.Size(154, 14);
             this.label6.TabIndex = 66;
-            this.label6.Text = "CH0 Sensivity(mv/g)";
+            this.label6.Text = "CH0 Sensitivity(mv/g)";
             // 
             // comboBoxSelectChannel
             // 
@@ -671,10 +671,10 @@
             this.easyChartFFT.GradientStyle = SeeSharpTools.JY.GUI.EasyChart.EasyChartGradientStyle.None;
             this.easyChartFFT.LegendBackColor = System.Drawing.Color.Transparent;
             this.easyChartFFT.LegendVisible = true;
-            easyChartSeries4.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
-            easyChartSeries4.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
-            easyChartSeries4.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
-            this.easyChartFFT.LineSeries.Add(easyChartSeries4);
+            easyChartSeries2.InterpolationStyle = SeeSharpTools.JY.GUI.EasyChartSeries.Interpolation.FastLine;
+            easyChartSeries2.MarkerType = SeeSharpTools.JY.GUI.EasyChartSeries.PointStyle.None;
+            easyChartSeries2.Width = SeeSharpTools.JY.GUI.EasyChartSeries.LineWidth.Thin;
+            this.easyChartFFT.LineSeries.Add(easyChartSeries2);
             this.easyChartFFT.Location = new System.Drawing.Point(63, 315);
             this.easyChartFFT.MajorGridColor = System.Drawing.Color.Black;
             this.easyChartFFT.MajorGridEnabled = true;
@@ -754,7 +754,7 @@
             this.ipAddressControl1.BackColor = System.Drawing.SystemColors.Window;
             this.ipAddressControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ipAddressControl1.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.ipAddressControl1.Location = new System.Drawing.Point(809, 466);
+            this.ipAddressControl1.Location = new System.Drawing.Point(814, 466);
             this.ipAddressControl1.MinimumSize = new System.Drawing.Size(87, 22);
             this.ipAddressControl1.Name = "ipAddressControl1";
             this.ipAddressControl1.ReadOnly = false;
@@ -778,9 +778,9 @@
             this.label3.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.Location = new System.Drawing.Point(682, 381);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(84, 14);
+            this.label3.Size = new System.Drawing.Size(133, 14);
             this.label3.TabIndex = 69;
-            this.label3.Text = "CH1報警閥值";
+            this.label3.Text = "CH1報警閥值(g rms)";
             // 
             // label4
             // 
@@ -788,9 +788,9 @@
             this.label4.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label4.Location = new System.Drawing.Point(682, 408);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 14);
+            this.label4.Size = new System.Drawing.Size(133, 14);
             this.label4.TabIndex = 70;
-            this.label4.Text = "CH2報警閥值";
+            this.label4.Text = "CH2報警閥值(g rms)";
             // 
             // label5
             // 
@@ -798,9 +798,9 @@
             this.label5.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label5.Location = new System.Drawing.Point(682, 437);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(84, 14);
+            this.label5.Size = new System.Drawing.Size(133, 14);
             this.label5.TabIndex = 71;
-            this.label5.Text = "CH3報警閥值";
+            this.label5.Text = "CH3報警閥值(g rms)";
             // 
             // numericUpDown_Ch1_Threshold
             // 
@@ -810,7 +810,7 @@
             0,
             0,
             131072});
-            this.numericUpDown_Ch1_Threshold.Location = new System.Drawing.Point(809, 379);
+            this.numericUpDown_Ch1_Threshold.Location = new System.Drawing.Point(815, 379);
             this.numericUpDown_Ch1_Threshold.Maximum = new decimal(new int[] {
             10,
             0,
@@ -839,7 +839,7 @@
             0,
             0,
             131072});
-            this.numericUpDown_Ch2_Threshold.Location = new System.Drawing.Point(809, 409);
+            this.numericUpDown_Ch2_Threshold.Location = new System.Drawing.Point(815, 409);
             this.numericUpDown_Ch2_Threshold.Maximum = new decimal(new int[] {
             10,
             0,
@@ -868,7 +868,7 @@
             0,
             0,
             131072});
-            this.numericUpDown_Ch3_Threshold.Location = new System.Drawing.Point(809, 437);
+            this.numericUpDown_Ch3_Threshold.Location = new System.Drawing.Point(815, 437);
             this.numericUpDown_Ch3_Threshold.Maximum = new decimal(new int[] {
             10,
             0,
@@ -935,7 +935,8 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(246, 288);
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(933, 540);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 22);
             this.textBox1.TabIndex = 74;
@@ -944,7 +945,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("SimSun", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label15.Location = new System.Drawing.Point(691, 20);
+            this.label15.Location = new System.Drawing.Point(677, 20);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(91, 14);
             this.label15.TabIndex = 83;
@@ -961,7 +962,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1134, 549);
+            this.ClientSize = new System.Drawing.Size(1134, 531);
             this.Controls.Add(this.textBoxmachinename);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.textBox1);

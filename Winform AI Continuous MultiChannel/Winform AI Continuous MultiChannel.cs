@@ -507,12 +507,12 @@ namespace SeeSharpExample.JY.JYUSB62405
                 if (index == 1)
                 {
                     File.AppendAllText(path + channel + filename + ".csv", "Hz," + string.Join(",", indexf) + "\n");
-                    File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
+                    File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss") + "," + string.Join(",", FFTData) + "\n");
 
                 }
                 else if (index == averagetimes)
                 {
-                    File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss_ff") + "," + string.Join(",", FFTData) + "\n");
+                    File.AppendAllText(path + channel + filename + ".csv", time.ToString("yyy_MM_dd_HH_mm_ss") + "," + string.Join(",", FFTData) + "\n");
                     File.AppendAllText(path + channel + filename + ".csv", "Average" + "," + string.Join(",", FFTaverage) + "\n");
                     File.Move(path + channel + filename + ".csv", path + channel + time.ToString("yyy_MM_dd_HH_mm_ss") + ".csv");
 
@@ -746,6 +746,126 @@ namespace SeeSharpExample.JY.JYUSB62405
             }
 
         }
+        private void Channel0Topic()
+        {
+            
+            topicName["CH0_Name"] = ch0name;
+            topicName["CH0_AmpMaxFreq_Value"] = ch0maxfftindex;
+            topicName["CH0_AmpMaxFreq_Unit"] = "Hz";
+            topicName["CH0_AmpMinFreq_Value"] = ch0minfftindex;
+            topicName["CH0_AmpMinFreq_Unit"] = "Hz";
+            topicName["CH0_AlarmStatus"] = Convert.ToInt32(ch0alarmstatus);
+            if (ch0alarmstatus)
+            {
+                topicName["CH0_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
+                topicName["CH0_AlarmAmpthreshold_Value"] = numericUpDown_Ch0_Threshold.Value;
+                topicName["CH0_AlarmAmpthreshold_Unit"] = "g rms";
+                topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
+                topicName["CH0_AlarmAmp_Unit"] = "g rms";
+                topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
+                topicName["CH0_AlarmFreq_Unit"] = "Hz";
+            }
+            else
+            {
+                topicName["CH0_AlarmTimestamp"] = "";
+                topicName["CH0_AlarmAmpthreshold_Value"] = 0;
+                topicName["CH0_AlarmAmpthreshold_Unit"] = "";
+                topicName["CH0_AlarmAmp_Value"] = 0;
+                topicName["CH0_AlarmAmp_Unit"] = "";
+                topicName["CH0_AlarmFreq_Value"] = 0;
+                topicName["CH0_AlarmFreq_Unit"] = "";
+            }
+        }
+        private void Channel1Topic()
+        {
+            topicName["CH1_Name"] = ch1name;
+            topicName["CH1_AmpMaxFreq_Value"] = ch1maxfftindex;
+            topicName["CH1_AmpMaxFreq_Unit"] = "Hz";
+            topicName["CH1_AmpMinFreq_Value"] = ch1minfftindex;
+            topicName["CH1_AmpMinFreq_Unit"] = "Hz";
+            topicName["CH1_AlarmStatus"] = Convert.ToInt32(ch1alarmstatus);
+            if (ch1alarmstatus)
+            {
+                topicName["CH1_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
+                topicName["CH1_AlarmAmpthreshold_Value"] = numericUpDown_Ch1_Threshold.Value;
+                topicName["CH1_AlarmAmpthreshold_Unit"] = "g rms";
+                topicName["CH1_AlarmAmp_Value"] = ch1averagesprectrumMaxValue;
+                topicName["CH1_AlarmAmp_Unit"] = "g rms";
+                topicName["CH1_AlarmFreq_Value"] = ch1maxfftindex;
+                topicName["CH1_AlarmFreq_Unit"] = "Hz";
+            }
+            else
+            {
+                topicName["CH1_AlarmTimestamp"] = "";
+                topicName["CH1_AlarmAmpthreshold_Value"] = 0;
+                topicName["CH1_AlarmAmpthreshold_Unit"] = "";
+                topicName["CH1_AlarmAmp_Value"] = 0;
+                topicName["CH1_AlarmAmp_Unit"] = "g rms";
+                topicName["CH1_AlarmFreq_Value"] = 0;
+                topicName["CH1_AlarmFreq_Unit"] = "";
+            }
+
+        }
+        private void Channel2Topic()
+        {
+            topicName["CH2_Name"] = ch2name;
+            topicName["CH2_AmpMaxFreq_Value"] = ch2maxfftindex;
+            topicName["CH2_AmpMaxFreq_Unit"] = "Hz";
+            topicName["CH2_AmpMinFreq_Value"] = ch2minfftindex;
+            topicName["CH2_AmpMinFreq_Unit"] = "Hz";
+            topicName["CH2_AlarmStatus"] = Convert.ToInt32(ch2alarmstatus);
+            if (ch2alarmstatus)
+            {
+                topicName["CH2_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
+                topicName["CH2_AlarmAmpthreshold_Value"] = numericUpDown_Ch2_Threshold.Value;
+                topicName["CH2_AlarmAmpthreshold_Unit"] = "g rms";
+                topicName["CH2_AlarmAmp_Value"] = ch2averagesprectrumMaxValue;
+                topicName["CH2_AlarmAmp_Unit"] = "g rms";
+                topicName["CH2_AlarmFreq_Value"] = ch2maxfftindex;
+                topicName["CH2_AlarmFreq_Unit"] = "Hz";
+            }
+            else
+            {
+                topicName["CH2_AlarmTimestamp"] = "";
+                topicName["CH2_AlarmAmpthreshold_Value"] = 0;
+                topicName["CH2_AlarmAmpthreshold_Unit"] = "";
+                topicName["CH2_AlarmAmp_Value"] = 0;
+                topicName["CH2_AlarmAmp_Unit"] = "";
+                topicName["CH2_AlarmFreq_Value"] = 0;
+                topicName["CH2_AlarmFreq_Unit"] = "";
+            }
+
+        }
+        private void Channel3Topic()
+        {
+            topicName["CH3_Name"] = ch3name;
+            topicName["CH3_AmpMaxFreq_Value"] = ch3maxfftindex;
+            topicName["CH3_AmpMaxFreq_Unit"] = "Hz";
+            topicName["CH3_AmpMinFreq_Value"] = ch3minfftindex;
+            topicName["CH3_AmpMinFreq_Unit"] = "Hz";
+            topicName["CH3_AlarmStatus"] = Convert.ToInt32(ch3alarmstatus);
+            if (ch3alarmstatus)
+            {
+                topicName["CH3_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
+                topicName["CH3_AlarmAmpthreshold_Value"] = numericUpDown_Ch3_Threshold.Value;
+                topicName["CH3_AlarmAmpthreshold_Unit"] = "g rms";
+                topicName["CH3_AlarmAmp_Value"] = ch3averagesprectrumMaxValue;
+                topicName["CH3_AlarmAmp_Unit"] = "g rms";
+                topicName["CH3_AlarmFreq_Value"] = ch3maxfftindex;
+                topicName["CH3_AlarmFreq_Unit"] = "Hz";
+            }
+            else
+            {
+                topicName["CH3_AlarmTimestamp"] = "";
+                topicName["CH3_AlarmAmpthreshold_Value"] = 0;
+                topicName["CH3_AlarmAmpthreshold_Unit"] = "";
+                topicName["CH3_AlarmAmp_Value"] = 0;
+                topicName["CH3_AlarmAmp_Unit"] = "";
+                topicName["CH3_AlarmFreq_Value"] = 0;
+                topicName["CH3_AlarmFreq_Unit"] = "";
+            }
+
+        }
         private void WriteChannelData(int channelcount)
         {
             try
@@ -760,185 +880,32 @@ namespace SeeSharpExample.JY.JYUSB62405
                 topicName["EquipmentId"] = machinename;
                 topicName["BandWidth"] = aitask.SampleRate / 2;
                 topicName["FreqencyRes"] = aitask.SampleRate / aitask.SampleRate;
+                topicName["ChannelCnt"] = channelcount;
                 switch (channelcount)
                 {
                     case 1:
-                        topicName["ChannelCnt"] = channelcount;
-                        topicName["CH0_Name"] = ch0name;
-                        topicName["CH0_AmpMaxFreq_Value"] = ch0maxfftindex;
-                        topicName["CH0_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH0_AmpMinFreq_Value"] = ch0minfftindex;
-                        topicName["CH0_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH0_AlarmStatus"] = Convert.ToInt32(ch0alarmstatus);
-                        if (ch0alarmstatus)
-                        {
-                            topicName["CH0_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH0_AlarmAmpthreshold_Value"] = numericUpDown_Ch0_Threshold.Value;
-                            topicName["CH0_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
-                            topicName["CH0_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
-                            topicName["CH0_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH0_AlarmTimestamp"] = "";
-                            topicName["CH0_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH0_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH0_AlarmAmp_Value"] = 0;
-                            topicName["CH0_AlarmAmp_Unit"] = "";
-                            topicName["CH0_AlarmFreq_Value"] = 0;
-                            topicName["CH0_AlarmFreq_Unit"] = "";
-                        }
+                        Channel0Topic();
                         ch0fftaveragedata.Add(JArray.FromObject(ch0averagesprectrumValue));
                         fftaveragedata["CH0_Amplitude"] = ch0fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
-                        //File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
                         WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                     case 2:
-                        topicName["ChannelCnt"] = channelcount;
-                        topicName["CH0_Name"] = ch0name;
-                        topicName["CH0_AmpMaxFreq_Value"] = ch0maxfftindex;
-                        topicName["CH0_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH0_AmpMinFreq_Value"] = ch0minfftindex;
-                        topicName["CH0_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH0_AlarmStatus"] = Convert.ToInt32(ch0alarmstatus);
-                        if (ch0alarmstatus)
-                        {
-                            topicName["CH0_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH0_AlarmAmpthreshold_Value"] = numericUpDown_Ch0_Threshold.Value;
-                            topicName["CH0_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
-                            topicName["CH0_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
-                            topicName["CH0_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH0_AlarmTimestamp"] = "";
-                            topicName["CH0_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH0_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH0_AlarmAmp_Value"] = 0;
-                            topicName["CH0_AlarmAmp_Unit"] = "";
-                            topicName["CH0_AlarmFreq_Value"] = 0;
-                            topicName["CH0_AlarmFreq_Unit"] = "";
-                        }
-                        topicName["CH1_Name"] = ch1name;
-                        topicName["CH1_AmpMaxFreq_Value"] = ch1maxfftindex;
-                        topicName["CH1_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH1_AmpMinFreq_Value"] = ch1minfftindex;
-                        topicName["CH1_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH1_AlarmStatus"] = Convert.ToInt32(ch1alarmstatus);
-                        if (ch1alarmstatus)
-                        {
-                            topicName["CH1_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH1_AlarmAmpthreshold_Value"] = numericUpDown_Ch1_Threshold.Value;
-                            topicName["CH1_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH1_AlarmAmp_Value"] = ch1averagesprectrumMaxValue;
-                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH1_AlarmFreq_Value"] = ch1maxfftindex;
-                            topicName["CH1_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH1_AlarmTimestamp"] = "";
-                            topicName["CH1_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH1_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH1_AlarmAmp_Value"] = 0;
-                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH1_AlarmFreq_Value"] = 0;
-                            topicName["CH1_AlarmFreq_Unit"] = "";
-                        }
+                        Channel0Topic();
+                        Channel1Topic();
                         ch0fftaveragedata.Add(JArray.FromObject(ch0averagesprectrumValue));
                         fftaveragedata["CH0_Amplitude"] = ch0fftaveragedata;
                         ch1fftaveragedata.Add(JArray.FromObject(ch1averagesprectrumValue));
                         fftaveragedata["CH1_Amplitude"] = ch1fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
                         File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                     case 3:
-                        topicName["ChannelCnt"] = channelcount;
-                        topicName["CH0_Name"] = ch0name;
-                        topicName["CH0_AmpMaxFreq_Value"] = ch0maxfftindex;
-                        topicName["CH0_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH0_AmpMinFreq_Value"] = ch0minfftindex;
-                        topicName["CH0_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH0_AlarmStatus"] = Convert.ToInt32(ch0alarmstatus);
-                        if (ch0alarmstatus)
-                        {
-                            topicName["CH0_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH0_AlarmAmpthreshold_Value"] = numericUpDown_Ch0_Threshold.Value;
-                            topicName["CH0_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
-                            topicName["CH0_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
-                            topicName["CH0_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH0_AlarmTimestamp"] = "";
-                            topicName["CH0_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH0_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH0_AlarmAmp_Value"] = 0;
-                            topicName["CH0_AlarmAmp_Unit"] = "";
-                            topicName["CH0_AlarmFreq_Value"] = 0;
-                            topicName["CH0_AlarmFreq_Unit"] = "";
-                        }
-                        topicName["CH1_Name"] = ch1name;
-                        topicName["CH1_AmpMaxFreq_Value"] = ch1maxfftindex;
-                        topicName["CH1_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH1_AmpMinFreq_Value"] = ch1minfftindex;
-                        topicName["CH1_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH1_AmpMinFreq_Unit"] = "g rms";
-                        topicName["CH1_AlarmStatus"] = Convert.ToInt32(ch1alarmstatus);
-                        if (ch1alarmstatus)
-                        {
-                            topicName["CH1_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH1_AlarmAmpthreshold_Value"] = numericUpDown_Ch1_Threshold.Value;
-                            topicName["CH1_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH1_AlarmAmp_Value"] = ch1averagesprectrumMaxValue;
-                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH1_AlarmFreq_Value"] = ch1maxfftindex;
-                            topicName["CH1_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH1_AlarmTimestamp"] = "";
-                            topicName["CH1_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH1_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH1_AlarmAmp_Value"] = 0;
-                            topicName["CH1_AlarmAmp_Unit"] = "";
-                            topicName["CH1_AlarmFreq_Value"] = 0;
-                            topicName["CH1_AlarmFreq_Unit"] = "";
-                        }
-                        topicName["CH2_Name"] = ch2name;
-                        topicName["CH2_AmpMaxFreq_Value"] = ch2maxfftindex;
-                        topicName["CH2_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH2_AmpMinFreq_Value"] = ch2minfftindex;
-                        topicName["CH2_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH2_AmpMinFreq_Unit"] = "g rms";
-                        topicName["CH2_AlarmStatus"] = Convert.ToInt32(ch2alarmstatus);
-                        if (ch2alarmstatus)
-                        {
-                            topicName["CH2_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH2_AlarmAmpthreshold_Value"] = numericUpDown_Ch2_Threshold.Value;
-                            topicName["CH2_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH2_AlarmAmp_Value"] = ch2averagesprectrumMaxValue;
-                            topicName["CH2_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH2_AlarmFreq_Value"] = ch2maxfftindex;
-                            topicName["CH2_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH2_AlarmTimestamp"] = "";
-                            topicName["CH2_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH2_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH2_AlarmAmp_Value"] = 0;
-                            topicName["CH2_AlarmAmp_Unit"] = "";
-                            topicName["CH2_AlarmFreq_Value"] = 0;
-                            topicName["CH2_AlarmFreq_Unit"] = "";
-                        }
+                        Channel0Topic();
+                        Channel1Topic();
+                        Channel2Topic();
                         ch0fftaveragedata.Add(JArray.FromObject(ch0averagesprectrumValue));
                         fftaveragedata["CH0_Amplitude"] = ch0fftaveragedata;
                         ch1fftaveragedata.Add(JArray.FromObject(ch1averagesprectrumValue));
@@ -946,119 +913,14 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ch2fftaveragedata.Add(JArray.FromObject(ch2averagesprectrumValue));
                         fftaveragedata["CH2_Amplitude"] = ch2fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
-                        //File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
                         WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                     case 4:
-                        topicName["ChannelCnt"] = channelcount;
-                        topicName["CH0_Name"] = ch0name;
-                        topicName["CH0_AmpMaxFreq_Value"] = ch0maxfftindex;
-                        topicName["CH0_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH0_AmpMinFreq_Value"] = ch0minfftindex;
-                        topicName["CH0_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH0_AmpMinFreq_Unit"] = "g rms";
-                        topicName["CH0_AlarmStatus"] = Convert.ToInt32(ch0alarmstatus);
-                        if (ch0alarmstatus)
-                        {
-                            topicName["CH0_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH0_AlarmAmpthreshold_Value"] = numericUpDown_Ch0_Threshold.Value;
-                            topicName["CH0_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH0_AlarmAmp_Value"] = ch0averagesprectrumMaxValue;
-                            topicName["CH0_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH0_AlarmFreq_Value"] = ch0maxfftindex;
-                            topicName["CH0_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH0_AlarmTimestamp"] = "";
-                            topicName["CH0_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH0_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH0_AlarmAmp_Value"] = 0;
-                            topicName["CH0_AlarmAmp_Unit"] = "";
-                            topicName["CH0_AlarmFreq_Value"] = 0;
-                            topicName["CH0_AlarmFreq_Unit"] = "";
-                        }
-                        topicName["CH1_Name"] = ch1name;
-                        topicName["CH1_AmpMaxFreq_Value"] = ch1maxfftindex;
-                        topicName["CH1_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH1_AmpMinFreq_Value"] = ch1minfftindex;
-                        topicName["CH1_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH1_AmpMinFreq_Unit"] = "g rms";
-                        topicName["CH1_AlarmStatus"] = Convert.ToInt32(ch1alarmstatus);
-                        if (ch1alarmstatus)
-                        {
-                            topicName["CH1_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH1_AlarmAmpthreshold_Value"] = numericUpDown_Ch1_Threshold.Value;
-                            topicName["CH1_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH1_AlarmAmp_Value"] = ch1averagesprectrumMaxValue;
-                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH1_AlarmFreq_Value"] = ch1maxfftindex;
-                            topicName["CH1_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH1_AlarmTimestamp"] = "";
-                            topicName["CH1_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH1_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH1_AlarmAmp_Value"] = 0;
-                            topicName["CH1_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH1_AlarmFreq_Value"] = 0;
-                            topicName["CH1_AlarmFreq_Unit"] = "";
-                        }
-                        topicName["CH2_Name"] = ch2name;
-                        topicName["CH2_AmpMaxFreq_Value"] = ch2maxfftindex;
-                        topicName["CH2_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH2_AmpMinFreq_Value"] = ch2minfftindex;
-                        topicName["CH2_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH2_AmpMinFreq_Unit"] = "g rms";
-                        topicName["CH2_AlarmStatus"] = Convert.ToInt32(ch2alarmstatus);
-                        if (ch2alarmstatus)
-                        {
-                            topicName["CH2_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH2_AlarmAmpthreshold_Value"] = numericUpDown_Ch2_Threshold.Value;
-                            topicName["CH2_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH2_AlarmAmp_Value"] = ch2averagesprectrumMaxValue;
-                            topicName["CH2_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH2_AlarmFreq_Value"] = ch2maxfftindex;
-                            topicName["CH2_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH2_AlarmTimestamp"] = "";
-                            topicName["CH2_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH2_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH2_AlarmAmp_Value"] = 0;
-                            topicName["CH2_AlarmAmp_Unit"] = "";
-                            topicName["CH2_AlarmFreq_Value"] = 0;
-                            topicName["CH2_AlarmFreq_Unit"] = "";
-                        }
-                        topicName["CH3_Name"] = ch3name;
-                        topicName["CH3_AmpMaxFreq_Value"] = ch3maxfftindex;
-                        topicName["CH3_AmpMaxFreq_Unit"] = "Hz";
-                        topicName["CH3_AmpMinFreq_Value"] = ch3minfftindex;
-                        topicName["CH3_AmpMinFreq_Unit"] = "Hz";
-                        topicName["CH3_AmpMinFreq_Unit"] = "g rms";
-                        topicName["CH3_AlarmStatus"] = Convert.ToInt32(ch3alarmstatus);
-                        if (ch3alarmstatus)
-                        {
-                            topicName["CH3_AlarmTimestamp"] = qoutdata.logtime.ToString("yyy_MM_dd_HH_mm_ss");
-                            topicName["CH3_AlarmAmpthreshold_Value"] = numericUpDown_Ch3_Threshold.Value;
-                            topicName["CH3_AlarmAmpthreshold_Unit"] = "g rms";
-                            topicName["CH3_AlarmAmp_Value"] = ch3averagesprectrumMaxValue;
-                            topicName["CH3_AlarmAmp_Unit"] = "g rms";
-                            topicName["CH3_AlarmFreq_Value"] = ch3maxfftindex;
-                            topicName["CH3_AlarmFreq_Unit"] = "Hz";
-                        }
-                        else
-                        {
-                            topicName["CH3_AlarmTimestamp"] = "";
-                            topicName["CH3_AlarmAmpthreshold_Value"] = 0;
-                            topicName["CH3_AlarmAmpthreshold_Unit"] = "";
-                            topicName["CH3_AlarmAmp_Value"] = 0;
-                            topicName["CH3_AlarmAmp_Unit"] = "";
-                            topicName["CH3_AlarmFreq_Value"] = 0;
-                            topicName["CH3_AlarmFreq_Unit"] = "";
-                        }
+                        Channel0Topic();
+                        Channel1Topic();
+                        Channel2Topic();
+                        Channel3Topic();
                         ch0fftaveragedata.Add(JArray.FromObject(ch0averagesprectrumValue));
                         fftaveragedata["CH0_Amplitude"] = ch0fftaveragedata;
                         ch1fftaveragedata.Add(JArray.FromObject(ch1averagesprectrumValue));
@@ -1068,7 +930,7 @@ namespace SeeSharpExample.JY.JYUSB62405
                         ch3fftaveragedata.Add(JArray.FromObject(ch3averagesprectrumValue));
                         fftaveragedata["CH3_Amplitude"] = ch3fftaveragedata;
                         topicName["FFTAverageData"] = fftaveragedata;
-                        //File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
+                        File.WriteAllText("D:\\jsontext.txt", topicName.ToString());
                         WriteMqtt("ChannelsValue", topicName.ToString(), false);
                         break;
                 }
